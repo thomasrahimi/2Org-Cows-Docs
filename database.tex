@@ -1,0 +1,10 @@
+% !TEX root = Documentation.tex
+
+\section{Database}
+
+The database for the projects are API-compatible, SQL databases, which run on freely available linux systems. Eventually the used and tested MySQL or MariaDB databases could be 
+replaced by other systems, such as MSSQL. Nevertheless, a full compatibility of other databases with the source code provided can not be guaranteed. To ensure safe operation of the
+server, databases, which are not directly linked to the project data, are separated from the main database. As a result, the login database and the external logging database are 
+separated from the main database. Therefore, three different databases exist for the purpose of the project.\\ 
+To increase the security of the database and to limit the risk of damage in case of SQL-injections, all databases are accessed by non-privileged users. Furthermore, there is a 
+separation in the users, regarding the function of the database invoked, to limit access to sensitive data in the database.

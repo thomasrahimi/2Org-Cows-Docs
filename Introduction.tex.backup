@@ -1,0 +1,12 @@
+% !TEX root = Documentation.tex
+
+\section{Introduction}
+
+The 2Org-Cows project is multinational and multi-partner project of research institutions in organic agriculture in Europe. It aims to improve the breeding of dairy cattle for organic dairy cow keeping
+and therefore aims to collect data to measure different parameters of animal welfare, health and keeping.\\
+In order to analyze all these data, a huge database has been created, which consists of the following components:
+\begin{itemize}
+ \item a browserbased, graphical user interface for the final user to access and query the database
+ \item a variety of interfaces to other programs
+ \item software to analyze database stored datasets using big data methods
+\end{itemize}

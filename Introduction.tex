@@ -1,0 +1,27 @@
+% !TEX root = Documentation.tex
+
+\section{Introduction}
+
+The 2Org-Cows project is multinational and multi-partner project of research institutions in organic agriculture in Europe. It aims to improve the breeding of dairy cattle for organic dairy cow keeping
+and therefore aims to collect data to measure different parameters of animal welfare, health and keeping.\\
+In order to analyze all these data, a huge database has been created, which consists of the following components:
+\begin{itemize}
+ \item a webbased, graphical user interface for the final user to access and query the database using a standard webbrowser
+ \item a variety of interfaces to other programs
+ \item software to analyze database stored datasets using big data methods, mainly based on R and on Python3
+ \item MySQL databases as the storage backbone of the whole software and project
+ \item Ubuntu 16.04 operating system, PHP7 scripting language and Apache2 webserver to provide the user with the data required
+\end{itemize}
+In the following all parts of the software for the 2Org-Cows project should be documented. Please note that this file is work in progress and will therefore change steadily.
+
+\section{Common information regarding the coding}
+The project is generally based in its programming on several concepts, which should be briefly displayed in the following. The programming is therefore differenciated in the parts 
+regarded. 
+\paragraph{Web Frontend}
+The web frontend is largely written in PHP7 and HTML5, following the following paradigms: 
+\begin{itemize}
+ \item clear structure of code
+ \item clear separation of display code and code for the processing of input
+ \item easy to write, understand and maintain code
+ \item mostly procedural code style, only exception is the database system, which is based on object oriented code style
+\end{itemize}

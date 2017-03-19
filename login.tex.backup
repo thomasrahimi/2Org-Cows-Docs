@@ -1,0 +1,39 @@
+% !TEX root = Documentation.tex
+
+\section{The webbased User Interface}
+The user interface for the database has been developed as a graphical interface to allow broad acces to the database. It largely relies on standard web technologies such as HTML5, CSS3, 
+JavaScript and PHP7. All sites are connected in the session management, which regulates the access of users to the pages. Therefore all sites, except login, are only visible to 
+authenticated users.
+
+\subsection{login.php}
+The login.php site serves as the welcome site of the whole project, including basic information on the function of the sites for user access to the database.\\
+For security reasons and to track the visitors of the page, basic information about the visitor is stored in a separate database. This includes IP addresses, user agent of 
+the browser and the time of access. \\
+The login works with HTML5 forms, organized in a table to allow easier configuration to various screen sizes and offer the entering of username and password. 
+These forms consists of a text input with the input widget for text, to enter the username and a password input with the 
+password widget. Furthermore there is a submit button, which is submits the form data. Submitting this form starts processing of the form data with login\_script.php .
+\lstinputlisting[language=PHP]{login.php}.
+
+\subsection{login\_script.php}
+The login\_script.php script processes the data submitted from the login form. For security reasons, 
+authentication makes use of two different databases. The authentication database does not include any other data than the data required to initiate a session. In contrast,
+the agri\_star\_001 database includes more details on the specific user, including the insititution and the role of the user.\\
+Data processing happen in 4 steps, which come up sequencially.
+\begin{enumerate}
+ \item At first the script checks, whether a username exists, which matches the username provided in the form. In case the username can not be found in the database ``auth'', the script
+ redirects the user to login.php and creates error message, indicating unknown username. Otherwise the script continues to step 2.
+ \item If the username has been found, the script checks, whether the password, provided by the user, matches the password stored in the ``auth`` database. Therefore the PHP function 
+ password\_verify() is used. If the password provided does not match to the hash value, stored in the database, the user is redirected to login.php, receiving an error message about the 
+ password. Otherwise the script starts to initiate a session.
+ \item In the next step the script starts to create a session for the use of the research database. In order to ensure the security of the session, several steps are taken:
+ \begin{itemize}
+  \item the IP address of the user is stored to prevent session hijacking
+  \item the user agent of the user's browser is stored to prevent session hijacking
+  \item the user's institution is stored to regulate access to the data stored in the research database
+  \item the username is stored into the session to allow recognition of the user 
+  \item the user-id is stored into the session, because it is the primary key to the users in the database
+ \end{itemize}
+  Afterwards, the user is redirected to search.php, which acts as the main page.
+\end{enumerate}
+
+\lstinputlisting[language=PHP]{login_script.php}

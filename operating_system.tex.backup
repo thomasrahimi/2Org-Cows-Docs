@@ -1,0 +1,57 @@
+% !TEX root = Documentation.tex
+
+\section{Operating System}
+\subsection{Ubuntu}
+In Ubuntu less modifications than in CentOS are necessary to allow a stable and safe operation of the server. As the operating system ships another mandatory access controll system
+(MAC), configuration of user rights is far easier and faster proceded. During the installation of the operating system, the LAMP stack and the openssh server have been chosen for
+automatic installation. After the installation and the required reboot, updates should be checked and installed.
+\paragraph{Database installation and configuration}
+As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
+to match the conditions, under which the database server is operating.\\
+If necessary the configuration file under /etc/mysql/conf.d/server.conf has to be altered. It is important to check, if the networking access to the database server is allowed and 
+if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
+to access the database locally, but hinders external clients from initiating a network connection to the database.
+\paragraph{Web server installation and configuration}
+Both, apache2 and PHP7 have been installed in the initial installation, together with the database. As the web server should be configured as a virtual host, it is important to 
+modify the settings here. 
+
+\subsection{CentOS 7}
+In CentOS 7 several modifications were necessary to provide a stable and safe operation of the database and the interfaces. The following describes the installation of the required
+packages to a scratch installation. In case a LAMP installation has been chosen during the installation process of the operating system, some of these steps might be superfluous. 
+\paragraph{Database installation and configuration}
+First the database had to be installed. 
+Therefore \textbf{MariaDB} has been chosen, as it is the default database environment for RHEL-based Linux distributions. For the installation, mariadb-server has to be chosen, all
+dependencies are automatically fixed by the yum RPM wrapper. Furthermore PHP7 had to be installed, here it is important
+to install the database drivers as well, which are shipped in the package php70w-mysqlnd. Together with PHP7 httpd, as the web server, needs to be installed. For the access of httpd
+to the database it is important to execute the following commands:\\
+\begin{lstlisting}[language=bash]
+ sudo sestatus
+ sudo getsebool -a | grep httpd
+ sudo setsebool -P httpd_can_network_connect_db 1
+\end{lstlisting}
+\paragraph{Web server installation and configuration}
+As the LAMP stack is used for the project development, \textbf{apache2} is deployed as the default web server. apache2 is installed as a dependency of PHP7 and is shipped in 
+the package httpd. To ensure proper operation, the server has to be configured for shipping of multiple websites beside each other, which is ensured by using virtual hosts. 
+Therefore the following steps are necessary: 
+\begin{enumerate}
+ \item create a folder for the virtual host, using the following command:
+ \begin{lstlisting}[language=bash]
+  sudo mkdir -P /var/www/path_to_directory/content
+ \end{lstlisting}
+ \item grant the required permissions on the folder to the user:
+ \begin{lstlisting}[language=bash]
+  sudo chown -R $user:$user /var/www/path_to_directory/content
+  sudo chmod -R 755 /var/www/
+ \end{lstlisting}
+ \item create configuration files for the virtual host:
+ \begin{itemize}
+  \item Create the folders for the virtual host configuration:
+ \begin{lstlisting}[language=bash]
+  sudo mkdir /etc/httpd/sites-available
+  sudo mkdir /etc/httpd/sites-enabled
+ \end{lstlisting}
+ \item Add a line at the end of /etc/httpd/conf/httpd.conf:\\
+ IncludeOptional sites-enabled/*.conf
+ \end{itemize}
+\end{enumerate}
+

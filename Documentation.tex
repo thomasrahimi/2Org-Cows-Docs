@@ -1,0 +1,97 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper,12pt]{article}
+\usepackage[hidelinks]{hyperref} %Verlinkung des Inhaltverzeichnisses
+\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry} %Anpassung der Seitengröße
+\usepackage{textcomp} %für die € Zeichen
+\usepackage{graphicx}
+\usepackage[onehalfspacing]{setspace}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{xltxtra}%wichtig für xelatex
+\usepackage{xunicode, xcolor}%wichtig für xelatex
+\usepackage{lmodern}%nötig für Durchsuchbarkeit des pdf-Dokuments
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}%Definition der Unterschriften
+\usepackage{setspace}%Absätze mit definiertem Zeilenabstand erstellen
+\usepackage{csquotes}
+\usepackage{amsmath}%wichtig für Formeln
+\usepackage{pdfpages}%wichtig bei Einbindung kompletter pdf-Dateien
+\usepackage{listings}
+
+\setmainfont[Mapping=tex-text]{Calibri}
+\setsansfont[Mapping=tex-text]{Calibri}
+\onehalfspacing
+\sloppy %automatischer Zeilenumbruch
+
+\hypersetup{ %pdf settings
+    pdftitle={2Org-Cows Software Documentation},
+    pdfauthor={Thomas Rahimi, Boris Kulig},
+    pdfsubject={2Org-Cows Software},
+    pdfkeywords={Software, 2Org-Cows, organic Cowbreeding, Database},
+    bookmarksopen=true,
+}
+
+\lstset{ %code display settings
+  backgroundcolor=\color{white},
+  breakatwhitespace=false,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numbersep=5pt,
+  showstringspaces=false,
+  keepspaces=false,
+  showspaces=false,
+  breaklines=true,
+  commentstyle=\color{green}
+}
+
+%opening
+\title{2Org-Cows Software Documentation}
+\author{Thomas Rahimi: \href{mailto:thomas.rahimi@openmailbox.org}{thomas.rahimi@openmailbox.org},\\ Boris Kulig: \href{mailto:bkulig@uni-kassel.de}{bkulig@uni-kassel.de}}
+
+\date{}
+
+
+
+
+\begin{document}
+
+\maketitle
+\begin{center}
+ Universität Kassel,\\
+ Fachbereich 11,
+ FG Agrartechnik
+\end{center}
+
+\bigskip
+
+\begin{center}
+ \includegraphics[width=5cm,keepaspectratio=true]{./Logo-2Org-Cows.png}
+ % Logo-2Org-Cows.png: 128x128 pixel, 72dpi, 4.51x4.51 cm, bb=0 0 128 128
+\end{center}
+\thispagestyle{empty}
+\newpage
+
+\clearpage
+\tableofcontents
+\phantomsection %wichtig für die richtige Verlinkung im Inhaltsverzeichnis
+\addcontentsline{toc}{section}{Table of Contents}
+\thispagestyle{empty}
+\newpage
+
+\input{Introduction}
+
+\input{login}
+
+\input{create-user}
+
+\input{database}
+
+\input{operating_system}
+
+\include{license}
+
+\include{attachements}
+
+\end{document}
