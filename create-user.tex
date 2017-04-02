@@ -10,7 +10,14 @@ Creating a user leads to modifications in the Dim\_User table and the authentica
 the ``create user'' button, which calls the ``create\_user\_script.php'' file to process the form data and insert them into the database.\\ 
 The creation of new institution is also limited to people logged in as professors and admin. Each department is created separetely, even if an institution owns several departments, 
 taking part in the 2Org-Cows project. This improves the adjustability of rights sticked to the specific department in case of splitted user rights on certain datasets.
-The data inserted for the creation of an institution are processed by the create\_institution\_script.php file.
+The data inserted for the creation of an institution are processed by the create\_institution\_script.php file.\\
+Furthermore, the create-user.php allows the deletion of existing users. This is limited to users with the role code 4 and 3 (admin and professor), therefore the form is just visible 
+to users of that role. To prevent accidental deletions, a separate checkbox has to be checked, to delete a user. User deletion is limited to users from the same institution and exclude 
+the current user. The deletion of the user is proceeded by the delete\_user\_script.php .\\
+As the data in the database are bound to specific groups, the rights management on the group level has to be performed with the administration aswell. Therefore, all departments are 
+retrieved from the database and listed in a table. To improve the overview to the departments, the table is splitted into institutions and departments. Finally, the table includes 
+one checkbox per department, which sets a value in the corresponding table. As all permissions are stored in a translation table in the database, an own script updates this table 
+and sets the value for the access on the data.
 
 \subsection{create\_user\_script.php}
 The create\_user\_script.php is the processing file for the entries to create a new user in the web interface for the database. Basically the script just performs the validity checks 
@@ -30,8 +37,17 @@ If any of these checks fails, the user receives an error notice and is directed 
 way in the database, than in the user session, the database values have to be retrieved from the database. Therefore, the corresponding institution, department and country are 
 queried from the Dim\_Group table. As the country is stored as an integer value, the corresponding ID\_Country has to be queried from the Dim\_Country in the next step.\\
 The passwords are stored as bcrypt hash values in a separate database, the hashing is performed after the validity checks for the form. The next step is to insert all data into the 
-Dim\_User table in the agri\_star\_001 database. The insert is proceeded in an objective style, generating the query first, then assigning the values to the query 
-(mysqli::prepare(\$query), mysqli::bind\_param(parameters)) and than executing the query (mysqli::execute). The transaction id of that insert is retrieved, as it is used as ID\_User
-to identify the user in the various databases and therefore also in the auth database. In the next step the username, the password hash and the ID\_User are inserted into the 
-auth database, using the same process as for the Dim\_User table.\\
+Dim\_User table in the agri\_star\_001 database. During this step the ID\_User value, which identifies the user during further operation, is set as the resulting auto-increment 
+value for the primary key from the database. To allow sufficiently large user amounts, the ID\_User field is of the type BIGINT. The insert is proceeded in an objective style, 
+generating the query first, then assigning the values to the query (mysqli::prepare(\$query), mysqli::bind\_param(parameters)) and than executing the query (mysqli::execute). 
+The transaction id of that insert is retrieved, as it is used as ID\_User, to map the data in the auth database to the corresponding user. 
+In the next step the username, the password hash and the ID\_User are inserted into the auth database, using the same process as for the Dim\_User table.\\
 The scripts quits with a success message.
+
+\subsection{create\_institution\_script.php}
+The create\_institution\_script.php is the processing script for the entries in the institution form. Again it is basically an \textbf{INSERT} query to the database, where no 
+external have to be retrieved from other tables in the database. The only type checking for an input field, being performed by the create\_institution\_script.php, is the check 
+of the provided e-mail address. This check just checks for the basic match with e-mail regulations. If all fields are filled, the provided data is put into the Dim\_Group table 
+in the database, using a similar method as for the users.\\
+To allow groupwise right grants, a separate table with all institutions in the Dim\_Group keeps track of the granted rights. Therefore, it is important to create connections between 
+all groups created during the project. 
