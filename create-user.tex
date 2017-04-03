@@ -1,5 +1,6 @@
 % !TEX root = Documentation.tex
 
+\label{create-user.php}
 \subsection{create-user.php}
 The create-user.php site offers the opportunity to create a new user and to set the right for this specific user. User creation follows the idea of dropping rights, 
 which only allows a user to create another user with less rights than he has himself. To ensure this, create-user.php is just visible to users with a role, higher than student.
@@ -16,7 +17,8 @@ to users of that role. To prevent accidental deletions, a separate checkbox has 
 the current user. The deletion of the user is proceeded by the delete\_user\_script.php .\\
 As the data in the database are bound to specific groups, the rights management on the group level has to be performed with the administration aswell. Therefore, all departments are 
 retrieved from the database and listed in a table. To improve the overview to the departments, the table is splitted into institutions and departments. Finally, the table includes 
-one checkbox per department, which sets a value in the corresponding table. As all permissions are stored in a translation table in the database, an own script updates this table 
+one checkbox per department, which sets a value in the corresponding table. The table also shows with the checkboxes, which departments are granted access rights to the data tables 
+of the institution invoked. As all permissions are stored in a translation table in the database, an own script updates this table 
 and sets the value for the access on the data.
 
 \subsection{create\_user\_script.php}
@@ -50,4 +52,20 @@ external have to be retrieved from other tables in the database. The only type c
 of the provided e-mail address. This check just checks for the basic match with e-mail regulations. If all fields are filled, the provided data is put into the Dim\_Group table 
 in the database, using a similar method as for the users.\\
 To allow groupwise right grants, a separate table with all institutions in the Dim\_Group keeps track of the granted rights. Therefore, it is important to create connections between 
-all groups created during the project. 
+all groups created during the project. In order to do this, the transaction ID is retrieved from the database and all other ID\_Group values are queried from the database. Than 
+these values are written into the grants table, where one column is the giving group and another column is the receiving group. \\
+Finally the script quits with a success message.
+
+\subsection{delete\_user\_script.php}
+The deletion of a user does not lead to all his data being wiped out of the Dim\_User and the auth table, instead the user is simply kept from successfully logging into the frontend. 
+Therefore, the password in the auth table is updated to a cryptographically save binary string. Furthermore, the column user\_not\_active in the Dim\_User table is set to 1, which 
+does not show the user in any active state anymore. The script exits with a success message and refers to the create-user.php page.
+
+\subsection{grant-rights.php}
+The permissions administration in the rights table is written with the grant-rights.php into the database. Unlike the former scripts, which basically performed an INSERT query on 
+the database, the grant-rights.php first checks, whether an entry corresponding to the two mentioned groups exists in the grants table. This just occurs, if the user has chosen 
+a group, with which he wants to share data. Otherwise, nothing happens to the table and not selected groups are neither inserted nor updated. In case the entry with the two groups 
+does not exist both ID\_Group values and the value for data access (1) are written into the database.\\
+If the matching of both groups already exists, as it was created during a group creation, the script just updates the access value to one. Then the scripts exits with a success 
+message.\\
+Up till now, a withdrawal of permissions is not yet possible, but should be enabled within short future.
