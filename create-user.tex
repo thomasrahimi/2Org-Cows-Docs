@@ -34,7 +34,10 @@ For the validity checks the following steps are taken:
  \item check, whether the password matches matches the control field
  \item check whether the user permissions, entered in the form, are allowed to be performed by the user invoked
  \item check whether the user invoked is allowed to select an institution different from his own
+ \item check whether the entered permissions are meet the other data entered into the database, such as check, if a user role is possible or if a group exists.
 \end{itemize}
+All manual input on free text fields, such as the username, etc. is not checked again by the script and taken for true and granted. During the script, only one value is changed 
+automatically, which is the username, as it is set to a small letter string.\\
 If any of these checks fails, the user receives an error notice and is directed to the form.As the group, department and the country entries are stored in a different
 way in the database, than in the user session, the database values have to be retrieved from the database. Therefore, the corresponding institution, department and country are 
 queried from the Dim\_Group table. As the country is stored as an integer value, the corresponding ID\_Country has to be queried from the Dim\_Country in the next step.\\
@@ -46,11 +49,13 @@ The transaction id of that insert is retrieved, as it is used as ID\_User, to ma
 In the next step the username, the password hash and the ID\_User are inserted into the auth database, using the same process as for the Dim\_User table.\\
 The scripts quits with a success message.
 
+\label{create_institution_script.php}
 \subsection{create\_institution\_script.php}
 The create\_institution\_script.php is the processing script for the entries in the institution form. Again it is basically an \textbf{INSERT} query to the database, where no 
 external have to be retrieved from other tables in the database. The only type checking for an input field, being performed by the create\_institution\_script.php, is the check 
-of the provided e-mail address. This check just checks for the basic match with e-mail regulations. If all fields are filled, the provided data is put into the Dim\_Group table 
-in the database, using a similar method as for the users.\\
+of the provided e-mail address. This check just checks for the basic match with e-mail regulations. Furthermore, a logical check is performed on the selected country, where the 
+script checks, whether the selected country exists in the database. In all other cases, the user input is not checked again by the script and taken for granted and true. 
+If all fields are filled, the provided data is put into the Dim\_Group table in the database, using a similar method as for the users.\\
 To allow groupwise right grants, a separate table with all institutions in the Dim\_Group keeps track of the granted rights. Therefore, it is important to create connections between 
 all groups created during the project. In order to do this, the transaction ID is retrieved from the database and all other ID\_Group values are queried from the database. Than 
 these values are written into the grants table, where one column is the giving group and another column is the receiving group. \\

@@ -7,4 +7,59 @@ replaced by other systems, such as MSSQL. Nevertheless, a full compatibility of 
 server, databases, which are not directly linked to the project data, are separated from the main database. As a result, the login database and the external logging database are 
 separated from the main database. Therefore, three different databases exist for the purpose of the project.\\ 
 To increase the security of the database and to limit the risk of damage in case of SQL-injections, all databases are accessed by non-privileged users. Furthermore, there is a 
-separation in the users, regarding the function of the database invoked, to limit access to sensitive data in the database.
+separation in the users, regarding the function of the database invoked, to limit access to sensitive data in the database. As the project does not require external programm access 
+to the database, the network access to the database is limited to localhost.
+
+\subsection{agri\_star\_001}
+
+The agri\_star\_001 database is the main productive database in the whole project, as it serves as the major saving space for data gathered in the project. In the project's initial 
+shape, the agri\_star\_001 should have been the only database in the project, but during the development of the web frontend, further databases have been added for several 
+reasons.\\
+As already indicated in the introduction, the database uses a star schemed structure, to allow quick access to all data in the different tables. The tables are the following:
+\begin{itemize}
+ \item \textbf{Dim\_Animal} → contains information related to an individual animal
+ \item \textbf{Dim\_Country} → contains the ISO abbreviations for the countries, where the contributing institutions come from
+ \item \textbf{Dim\_Farm} → contains information on the farm level
+ \item \textbf{Dim\_Gage} → contains information on the applied measuring methods in the project
+ \item \textbf{Dim\_Group} → group related information, such as the address, the responsible person and the country. As already mentioned in the 
+ \hyperref[create_institution_script.php]{create\_institution\_script.php}, the group table includes the information for each department individually. Therefore, an institution 
+ with multiple departments, taking part in the project, has multiple entries in the Dim\_Group table.
+ \item \textbf{Dim\_Time} →
+ \item \textbf{Dim\_Timezone} → table to keep the timezones for the different partners in the project
+ \item \textbf{Dim\_Trait} →
+ \item \textbf{Dim\_User} → user related information, such as related institution, etc.
+ \item \textbf{Search} → Important to save the searches of users, to allow multiple search requests with the same settings
+ \item \textbf{dates} →
+ \item \textbf{grants} → Translation table to implement an access control list (ACL) system. This table stores all possible connections between groups, to allow foreign access on 
+ data
+ \item \textbf{numbers} →
+ \item \textbf{numbers\_kl} →
+ \item \textbf{numbers\_small} →
+\end{itemize}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=10cm,keepaspectratio=true]{./agri_star_001-structure.png}
+ % agri_star_001-structure.png: 0x0 pixel, 300dpi, 0.00x0.00 cm, bb=
+ \caption{Original Structure of the agri\_star\_001 Database}
+\end{figure}
+
+\noindent For data access during operation, the sql requests might be combined, if the required data are spread on different tables. This might lead to JOIN requests, combining 
+different sql queries in one go. Further connection of the tables happens over the interface software, which usually treats the tables as single units, but can also connect them.\\
+In many tables, the primary key is set automatically as auto increment, to ensure that all datasets have unique keys. Manual setting of the keys might under certain circumstances 
+lead to multiple data sets, having the same primary key, as the random function to generate the key number might output the same number under different circumstances.
+
+\subsection{user\_auth}
+
+The user\_auth database is an auxiliary database to the agri\_star\_001 database. It is required to allow logins to the web frontend, as it saves the authentication information 
+for the users. Unlike agri\_star\_001 database, user\_auth just contains one table (auth), which includes all required information, basically the username, the password hash and the 
+ID\_User. For security reasons, these information have been separated from the Dim\_User table in agri\_star\_001. The ID\_User in the user\_auth database matches the ID\_User 
+value in the Dim\_User table, as it is taken over from the transaction id of the user creation in the Dim\_User table. During login process, the first requests are all the 
+user\_auth database, to prevent external attacks on the main database. Furthermore, the user\_auth database has an own dedicated user, which does not have any rights on other 
+databases, to access the database.
+
+\subsection{logdb}
+For security reasons, the web frontend includes some logging, which writes the results into a designated database. This database consists of three tables, which are not depending 
+on any other frontend solution, except for the traffic.php page. If a browser hits the login.php page, the access IP, the user agent of the browser invoked and the time of access 
+are logged. To comply with the requirement not to store unnecessary individual data, the IP address is shortened to three blocks.\\
+In case the user logs in, the same data, including the ID\_User are stored, whereas failed login attempts are logged with time, username, user agent and IP address. 

@@ -1,12 +1,8 @@
 % !TEX root = Documentation.tex
 
 \section{The webbased User Interface}
-The user interface for the database has been developed as a graphical interface to allow broad acces to the database. It largely relies on standard web technologies such as HTML5, CSS3, 
-JavaScript and PHP7. All sites are connected in the session management, which regulates the access of users to the pages. Therefore all sites, except login, are only visible to 
-authenticated users.\\
-The appearance of all sites is specified in the 2Org-Cows.css, which acts as the only stylesheet in the whole user interface. Only in some limited situations, style information is provided
-in HTML5 inline commands. These cases mainly occur in table-styled content, where the font definition is separetely on each sheet.  In the first development stage only limited responsiveness of the design is achieved, further development will focus on the responsiveness of the design
-and the right alignment of user interface elements in HTML5 on small screen devices, such as smartphones.
+The user interface for the database has been developed as a graphical interface to allow broad acces to the database. In the following, the different pages and their corresponding 
+scripts, in the web frontend, are described in detail.
 
 
 \subsection{login.php}
@@ -37,16 +33,16 @@ Data processing happen in 4 steps, which come up sequencially.
  password. Otherwise the script starts to initiate a session.
  \item In the next step the script starts to create a session for the use of the research database. In order to ensure the security of the session, several steps are taken:
  \begin{itemize}
-  \item the IP address of the user is stored to prevent session hijacking
-  \item the user agent of the user's browser is stored to prevent session hijacking
+  \item the IP address of the user is stored as a session variable to prevent session hijacking
+  \item the user agent of the user's browser is also stored as a session variable to prevent session hijacking
   \item the user's institution is stored to regulate access to the data stored in the research database, this information is encoded in the group id, which is set as a session
   variable, instead of the group name and the department
   \item the username is stored into the session to allow recognition of the user 
   \item the user-id is stored into the session, because it is the primary key to the users in the different databases
  \end{itemize}
-  Afterwards, the user is redirected to home.php, which acts as the main page. In order to check on the usage of the website, all successful logins are logged into a separate table in 
-  the logging database. To minimize the tracking of single users according to their IP address, the IP address is shortened to three blocks, which still allows sufficient data for 
-  the analysis of user interaction with the database.
+  Afterwards, the user is redirected to home.php, which acts as the main page. In order to check on the usage of the website, all successful logins are logged into a separate 
+  table in the logging database. To minimize the tracking of single users according to their IP address, the IP address is shortened to three blocks, which still allows sufficient 
+  data for the analysis of user interaction with the database.
   \item In case no login information has been provided by the user, the user is redirected to login.php .\\
 \end{enumerate}
 In case the login failed, the attempt is written into the Login\_Failed table in the logdb database, to track bruteforce attacks on user accounts.\\
