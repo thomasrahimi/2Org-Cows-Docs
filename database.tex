@@ -62,4 +62,5 @@ databases, to access the database.
 For security reasons, the web frontend includes some logging, which writes the results into a designated database. This database consists of three tables, which are not depending 
 on any other frontend solution, except for the traffic.php page. If a browser hits the login.php page, the access IP, the user agent of the browser invoked and the time of access 
 are logged. To comply with the requirement not to store unnecessary individual data, the IP address is shortened to three blocks.\\
-In case the user logs in, the same data, including the ID\_User are stored, whereas failed login attempts are logged with time, username, user agent and IP address. 
+In case the user logs in, the same data, including the ID\_User are stored, whereas failed login attempts are logged with time, username, user agent and IP address. The use of 
+this data is just for internal issues, such as preventing brute force attacks. It is not part of the project, to collect user data.

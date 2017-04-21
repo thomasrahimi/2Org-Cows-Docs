@@ -2,8 +2,8 @@
 
 \section{Introduction}
 
-The 2Org-Cows project is multinational and multi-partner project of research institutions in organic agriculture in Europe. It aims to improve the breeding of dairy cattle for organic dairy cow keeping
-and therefore aims to collect data to measure different parameters of animal welfare, health and keeping.\\
+The 2Org-Cows project is multinational and multi-partner project of research institutions in organic agriculture in Europe. It aims to improve the breeding of dairy cattle for 
+organic dairy cow keeping and therefore aims to collect data to measure different parameters of animal welfare, health and keeping.\\
 In order to analyze all these data, a huge database has been created, which consists of the following components:
 \begin{itemize}
  \item a webbased, graphical user interface for the final user to access and query the database using a standard webbrowser
@@ -15,13 +15,25 @@ In order to analyze all these data, a huge database has been created, which cons
 In the following all parts of the software for the 2Org-Cows project should be documented. Please note that this file is work in progress and will therefore change steadily.
 
 \section{Common information regarding the coding}
-The project is generally based in its programming on several concepts, which should be briefly displayed in the following. The programming is therefore differenciated in the parts 
-regarded. 
+The project is generally based, in its programming, on several concepts, which should be briefly displayed in the following. The programming is therefore differenciated in the 
+parts regarded. 
 \paragraph{Web Frontend}
 The web frontend is largely written in PHP7 and HTML5, following the following paradigms: 
 \begin{itemize}
  \item clear structure of code
  \item clear separation of display code and code for the processing of input
  \item easy to write, understand and maintain code
- \item mostly procedural code style, only exception is the database system, which is based on object oriented code style
+ \item Mostly procedural code style, only exception is the database system, which is based on object oriented code style
+ \item All available standard security solutions for PHP and HTML code should be applied, to ensure secure operation of the database. This includes escaping of all strings, using 
+ mysqli::real\_escape\_string() for all values, which is executed for all strings being in some kind of contact to the database, and htmlspecialchars() for all other strings. 
+ The insert scripts perform type checking operations on the content to insert, to limit the risk of inconsistent data.
+ \item SQL queries, including user generated content, are usually proceeded as prepared statements, to limit the risk of sql injections.
 \end{itemize}
+The appearance of all sites is specified in the 2Org-Cows.css, which acts as the only stylesheet in the whole user interface. Only in some limited situations, style information is 
+provided in HTML5 inline commands. These cases mainly occur in table-styled content, where the font definition is separetely on each sheet.  
+In the first development stage only limited responsiveness of the design is achieved, further development will focus on the responsiveness of the design
+and the right alignment of user interface elements in HTML5 on small screen devices, such as smartphones. Due to the extensive size of all pages, this might lead to further 
+reconstruction of the page and therefore to a special mobile version of the whole frontend.
+\paragraph{Database}
+The database design aims to provide a star schemed database, with as little programming and connection efforts as possible. Therefore, the overall database largely consists of 
+independent tables, which are linked together by the code of the frontend and the database interfaces.

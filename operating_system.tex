@@ -4,7 +4,22 @@
 \subsection{Ubuntu}
 In Ubuntu less modifications than in CentOS are necessary to allow a stable and safe operation of the server. As the operating system ships another mandatory access controll system
 (MAC), configuration of user rights is far easier and faster proceded. During the installation of the operating system, the LAMP stack and the openssh server have been chosen for
-automatic installation. After the installation and the required reboot, updates should be checked and installed.
+automatic installation. After the installation and the required reboot, updates should be checked and installed.\\
+
+\paragraph{Securing the server}
+To improve the server security, just logged in users can make use of the server. To prohibit external login attempts using ssh, the server is secured in different manners, of which 
+one is the setup of groups, allowed to login using ssh. Therefore, a specified group is created, to which all login users are added, requiring the following commands:
+\begin{lstlisting}[language=bash]
+ sudo addgroup --system [groupname]
+ sudo adduser [username] [groupname]
+\end{lstlisting}
+Than the /etc/ssh/sshd\_config file is modified, including adding and modifying the following lines in the file:
+\begin{lstlisting}
+ AllowGroups [groupname]
+ PermitRootLogin no
+\end{lstlisting}
+Finally the ssh server has to be restarted.
+
 \paragraph{Database installation and configuration}
 As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
 to match the conditions, under which the database server is operating.\\
