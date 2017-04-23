@@ -12,3 +12,10 @@ not important for the daily use of the database, the access to this page is limi
 one for the login.php page, displaying amount of accesses, time and IP address. Another table displays the data for the logged in users, showing IP address, time of login and user 
 invoked. And finally there is a table displaying all login attempts, which failed due to incorrect credentials. This table should enable the recognition of brute force attacks on 
 given accounts.
+
+\subsection{database-update.php}
+The database-update.php provides the graphical interface to import external data into the database. Therefore, it is the only way, the users of the interface can modify the database 
+on a larger scale, than in the manual inputs, which are provided in the other pages. The processing of the files takes place in the following upload.php file.
+
+\subsection{upload.php}
+The upload.php script processes the files selected in the database-update.php file and pastes them into the files database table in the agri\_star\_001 database.

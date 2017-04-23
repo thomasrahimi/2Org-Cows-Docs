@@ -33,20 +33,20 @@ host is set up with tls support to deliver the results of the requests as encryp
 are in danger of being intercepted. The configuration proceeds in the following steps:
 \begin{enumerate}
  \item First the directories for the virtualhost are created, using the following command:\\
- \begin{lstlisting}
+ \begin{lstlisting}[language=bash]
   sudo mkdir -p /var/www/path_to_directory/content
  \end{lstlisting}
  \item Next the permissions on the folder are set to the user invoked or a specific user for the deployment of the web server:\\
- \begin{lstlisting}
+ \begin{lstlisting}[language=bash]
   sudo chown -R $USER:$USER /var/www/path_to_directory/content
  \end{lstlisting}
  \item As the next step, the configuration files for the virtual host are created. To minimize spelling errors, the files are generated from the default configuration, which is 
  copied into a new file:\\
- \begin{lstlisting}
+ \begin{lstlisting}[language=bash]
   sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/name_virtual_host.conf
  \end{lstlisting}
  \item Now the virtual host has to be configured, with the following settings:\\
- \begin{lstlisting}
+ \begin{lstlisting}[language=bash]
   <VirtualHost *:443>
 	SSLEngine On
 	SSLCertificateFile /etc/ssl/certs/name_of_cert.crt
@@ -78,7 +78,7 @@ are in danger of being intercepted. The configuration proceeds in the following 
    sudo touch /var/www/path_to_directory/error.log
    sudo touch /var/www/path_to_directory/access.log
   \end{lstlisting}
-  
+  \item 
 
 
 

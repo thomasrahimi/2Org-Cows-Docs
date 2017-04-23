@@ -28,7 +28,7 @@
     pdftitle={2Org-Cows Software Documentation},
     pdfauthor={Thomas Rahimi, Boris Kulig},
     pdfsubject={2Org-Cows Software},
-    pdfkeywords={Software, 2Org-Cows, organic Cowbreeding, Database},
+    pdfkeywords={Software, 2Org-Cows, Organic Cowbreeding, Database, Big Data},
     bookmarksopen=true,
 }
 
@@ -60,7 +60,8 @@
 \maketitle
 \begin{center}
  Universität Kassel,\\
- Fachbereich 11,
+ Fachbereich 11,\\ 
+ ökologische Agrarwissenschaften Witzenhausen,\\
  FG Agrartechnik
 \end{center}
 
@@ -74,15 +75,20 @@
 \newpage
 
 \clearpage
+\phantomsection %wichtig für die richtige Verlinkung im Inhaltsverzeichnis, muss vor dem zu verlinkenden Artikel sein.
 \tableofcontents
-\phantomsection %wichtig für die richtige Verlinkung im Inhaltsverzeichnis
 \addcontentsline{toc}{section}{Table of Contents}
+\phantomsection
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
 \thispagestyle{empty}
 \newpage
 
 \input{Introduction}
 
 \input{login}
+
+\input{home}
 
 \input{create-user}
 
