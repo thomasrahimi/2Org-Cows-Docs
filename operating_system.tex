@@ -6,7 +6,7 @@ In Ubuntu less modifications than in CentOS are necessary to allow a stable and 
 (MAC), configuration of user rights is far easier and faster proceded. During the installation of the operating system, the LAMP stack and the openssh server have been chosen for
 automatic installation. After the installation and the required reboot, updates should be checked and installed.\\
 
-\paragraph{Securing the server}
+\subsubsection{Securing the server}
 To improve the server security, just logged in users can make use of the server. To prohibit external login attempts using ssh, the server is secured in different manners, of which 
 one is the setup of groups, allowed to login using ssh. Therefore, a specified group is created, to which all login users are added, requiring the following commands:
 \begin{lstlisting}[language=bash]
@@ -18,15 +18,36 @@ Than the /etc/ssh/sshd\_config file is modified, including adding and modifying 
  AllowGroups [groupname]
  PermitRootLogin no
 \end{lstlisting}
-Finally the ssh server has to be restarted.
+Finally the ssh server has to be restarted.\\
+Another security mechanism is the definition of available services in the /etc/hosts.allow and /etc/hosts.deny files on the server. This allows to block access all other webservices, 
+except for the required ones from other IP-addresses. This feature has been implemented in parts.\\
+Furthermore, the server makes use of a firewall, to prohibit attacks on not required open ports. Therefore, the ufw interface to iptables has been chosen. As the server is not 
+required to listen on other ports than the standard ports for the required services, the general rule is to deny all incoming traffic. At the same time, traffic is generally 
+allowed with the following commands:
+\begin{lstlisting}[language=bash]
+ sudo ufw default deny incoming
+ sudo ufw default allow outgoing
+\end{lstlisting}
+In the next step, all required network services, are excluded from the general denial of the services, using the following commands:
+\begin{lstlisting}[language=bash]
+ sudo ufw allow ssh
+ sudo ufw allow http
+ sudo ufw allow https
+\end{lstlisting}
+After the configuration is finished, the firewall is set active with the following command:
+\begin{lstlisting}[language=bash]
+ sudo ufw enable
+\end{lstlisting}
 
-\paragraph{Database installation and configuration}
+
+\subsubsection{Database installation and configuration}
 As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
 to match the conditions, under which the database server is operating.\\
 If necessary the configuration file under /etc/mysql/conf.d/server.conf has to be altered. It is important to check, if the networking access to the database server is allowed and 
 if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
 to access the database locally, but hinders external clients from initiating a network connection to the database.
-\paragraph{Web server installation and configuration}
+
+\subsubsection{Web server installation and configuration}
 Both, apache2 and PHP7 have been installed in the initial installation, together with the database. As the web server should be configured as a virtual host, it is important to 
 modify the settings here. There have been two virtual hosts defined, both referring to the same content folder, one host serves as the non-tls demo installation, whereas the other
 host is set up with tls support to deliver the results of the requests as encrypted material. The non-tls host is not intended to be used for login, as all user data sent to this host
@@ -78,10 +99,31 @@ are in danger of being intercepted. The configuration proceeds in the following 
    sudo touch /var/www/path_to_directory/error.log
    sudo touch /var/www/path_to_directory/access.log
   \end{lstlisting}
+  \item To ensure logrotate to compress the log files of the virtualhost, the file /etc/logrotate.d/apache2 has to be altered to the following:\\
+  \begin{lstlisting}[language=bash]
+   /var/log/apache2/*.log /var/www/path_to_directory/*.log {
+        daily
+        missingok
+        rotate 14
+        compress
+        delaycompress
+        notifempty
+        create 640 root adm
+        sharedscripts
+        postrotate
+                if /etc/init.d/apache2 status > /dev/null ; then \
+                    /etc/init.d/apache2 reload > /dev/null; \
+                fi;
+        endscript
+        prerotate
+                if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+                        run-parts /etc/logrotate.d/httpd-prerotate; \
+                fi; \
+        endscript
+  }
+  \end{lstlisting}
+  
   \item 
-
-
-
 \end{enumerate}
 
 
@@ -99,7 +141,8 @@ to the database it is important to execute the following commands:\\
  sudo getsebool -a | grep httpd
  sudo setsebool -P httpd_can_network_connect_db 1
 \end{lstlisting}
-\paragraph{Web server installation and configuration}
+
+\subsubsection{Web server installation and configuration}
 As the LAMP stack is used for the project development, \textbf{apache2} is deployed as the default web server. apache2 is installed as a dependency of PHP7 and is shipped in 
 the package httpd. To ensure proper operation, the server has to be configured for shipping of multiple websites beside each other, which is ensured by using virtual hosts. 
 Therefore the following steps are necessary: 
