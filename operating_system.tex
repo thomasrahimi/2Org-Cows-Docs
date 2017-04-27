@@ -53,20 +53,20 @@ modify the settings here. There have been two virtual hosts defined, both referr
 host is set up with tls support to deliver the results of the requests as encrypted material. The non-tls host is not intended to be used for login, as all user data sent to this host
 are in danger of being intercepted. The configuration proceeds in the following steps:
 \begin{enumerate}
- \item First the directories for the virtualhost are created, using the following command:\\
+ \item First the directories for the virtualhost are created, using the following command:
  \begin{lstlisting}[language=bash]
   sudo mkdir -p /var/www/path_to_directory/content
  \end{lstlisting}
- \item Next the permissions on the folder are set to the user invoked or a specific user for the deployment of the web server:\\
+ \item Next the permissions on the folder are set to the user invoked or a specific user for the deployment of the web server:
  \begin{lstlisting}[language=bash]
   sudo chown -R $USER:$USER /var/www/path_to_directory/content
  \end{lstlisting}
  \item As the next step, the configuration files for the virtual host are created. To minimize spelling errors, the files are generated from the default configuration, which is 
- copied into a new file:\\
+ copied into a new file:
  \begin{lstlisting}[language=bash]
   sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/name_virtual_host.conf
  \end{lstlisting}
- \item Now the virtual host has to be configured, with the following settings:\\
+ \item Now the virtual host has to be configured, with the following settings:
  \begin{lstlisting}[language=bash]
   <VirtualHost *:443>
 	SSLEngine On
@@ -94,12 +94,12 @@ are in danger of being intercepted. The configuration proceeds in the following 
   </VirtualHost>
  \end{lstlisting}
   The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL.
-  \item In the next step, all files named in the virtual host configuration, must be created or copied to the server. To create the files, the following command is used:\\
+  \item In the next step, all files named in the virtual host configuration, must be created or copied to the server. To create the files, the following command is used:
   \begin{lstlisting}
    sudo touch /var/www/path_to_directory/error.log
    sudo touch /var/www/path_to_directory/access.log
   \end{lstlisting}
-  \item To ensure logrotate to compress the log files of the virtualhost, the file /etc/logrotate.d/apache2 has to be altered to the following:\\
+  \item To ensure logrotate to compress the log files of the virtualhost, the file /etc/logrotate.d/apache2 has to be altered to the following:
   \begin{lstlisting}[language=bash]
    /var/log/apache2/*.log /var/www/path_to_directory/*.log {
         daily
@@ -130,7 +130,7 @@ are in danger of being intercepted. The configuration proceeds in the following 
 \subsection{CentOS 7}
 In CentOS 7 several modifications were necessary to provide a stable and safe operation of the database and the interfaces. The following describes the installation of the required
 packages to a scratch installation. In case a LAMP installation has been chosen during the installation process of the operating system, some of these steps might be superfluous. 
-\paragraph{Database installation and configuration}
+\subsubsection{Database installation and configuration}
 First the database had to be installed. 
 Therefore \textbf{MariaDB} has been chosen, as it is the default database environment for RHEL-based Linux distributions. For the installation, mariadb-server has to be chosen, all
 dependencies are automatically fixed by the yum RPM wrapper. Furthermore PHP7 had to be installed, here it is important
@@ -163,8 +163,10 @@ Therefore the following steps are necessary:
   sudo mkdir /etc/httpd/sites-available
   sudo mkdir /etc/httpd/sites-enabled
  \end{lstlisting}
- \item Add a line at the end of /etc/httpd/conf/httpd.conf:\\
+ \item Add a line at the end of /etc/httpd/conf/httpd.conf:
+ \begin{lstlisting}
  IncludeOptional sites-enabled/*.conf
+ \end{lstlisting}
  \end{itemize}
 \end{enumerate}
 
