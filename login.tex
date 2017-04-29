@@ -41,6 +41,7 @@ Data processing happen in 4 steps, which come up sequencially.
   variable, instead of the group name and the department
   \item the username is stored into the session to allow recognition of the user 
   \item the user-id is stored into the session, because it is the primary key to the users in the different databases
+  \item the session-id is stored into the session aswell, to allow the recognition of the session in the further session administration system
  \end{itemize}
   Afterwards, the user is redirected to home.php, which acts as the main page. In order to check on the usage of the website, all successful logins are logged into a separate 
   table in the logging database. To minimize the tracking of single users according to their IP address, the IP address is shortened to three blocks, which still allows sufficient 
@@ -49,3 +50,7 @@ Data processing happen in 4 steps, which come up sequencially.
 \end{enumerate}
 In case the login failed, the attempt is written into the Login\_Failed table in the logdb database, to track bruteforce attacks on user accounts.\\
 The database connections are closed at the end of each script to prevent accumulation of unused database connection by various scripts.
+
+\subsection{check-session.php and check-session\_restricted.php}
+The both scripts check-session.php and check-session\_restricted.php act as the connecting scripts between the different pages within the project. The basic intention of the scripts is to check, whether a session for the user exists and whether the user, therefore, is allowed to access pages within the project. Furthermore, the check-session\_restricted.php script checks, whether the logged in user has sufficient 
+permissions, to access limited pages. 
