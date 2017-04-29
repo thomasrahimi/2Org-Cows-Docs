@@ -2,7 +2,6 @@
 %!TEX encoding = UTF-8 Unicode
 
 \documentclass[a4paper,12pt]{article}
-\usepackage[hidelinks]{hyperref} %Verlinkung des Inhaltverzeichnisses
 \usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry} %Anpassung der Seitengröße
 \usepackage{textcomp} %für die € Zeichen
 \usepackage{graphicx}
@@ -18,6 +17,7 @@
 \usepackage{amsmath}%wichtig für Formeln
 \usepackage{pdfpages}%wichtig bei Einbindung kompletter pdf-Dateien
 \usepackage{listings}
+\usepackage[hidelinks]{hyperref} %Verlinkung des Inhaltverzeichnisses
 
 \setmainfont[Mapping=tex-text]{Calibri}
 \setsansfont[Mapping=tex-text]{Calibri}
@@ -43,7 +43,10 @@
   keepspaces=false,
   showspaces=false,
   breaklines=true,
-  commentstyle=\color{green}
+  commentstyle=\color{green},
+  tabsize=4,
+  numberstyle=\tiny\color{gray},
+  basicstyle=\fontsize{10}{12}
 }
 
 %opening
