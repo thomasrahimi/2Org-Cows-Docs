@@ -28,6 +28,8 @@ Data processing happen in 4 steps, which come up sequencially.
 \begin{enumerate}
  \item At first the script checks, whether a username exists, which matches the username provided in the form. In case the username can not be found in the database ``auth'', the script
  redirects the user to login.php and creates error message, indicating unknown username. Otherwise the script continues to step 2.
+ \item In case, a user has tried, a login with non matching credentials, too many times, the user is redirected to the login.php page and told to wait for some time. This settings 
+ should slow down brute force attacks on available accounts.
  \item If the username has been found, the script checks, whether the password, provided by the user, matches the password stored in the ``auth`` database. Therefore the PHP function 
  password\_verify() is used. If the password provided does not match to the hash value, stored in the database, the user is redirected to login.php, receiving an error message about the 
  password. Otherwise the script starts to initiate a session.
