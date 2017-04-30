@@ -72,12 +72,12 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	SSLEngine On
 	SSLCertificateFile /etc/ssl/certs/name_of_cert.crt
 	SSLCertificateKeyFile /etc/ssl/private/key.key
-	SSLCACertificateFile /etc/ssl/certs/certificate.crt
+	SSLCACertificateFile /etc/ssl/certs/certificate.crt # can be missing, depending on tls configuration of the server
 	ServerName www.servername.com
-        ServerAlias servername.com
+  ServerAlias servername.com
 	ServerAdmin admin@e-mail.com
 	DirectoryIndex login.php
-	ErrorDocument 404 /var/www/path_to_directory/content/error.php
+	ErrorDocument 404 /404 #should avoid 404 page not found errors
 	DocumentRoot /var/www/path_to_directory/content
 	ErrorLog /var/www/path_to_directory/error.log
 	CustomLog /var/www/path_to_directory/access.log combined
@@ -91,9 +91,10 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	Alias "/logout" /var/www/path_to_directory/content/scripts/logout.php
 	Alias "/home" /var/www/path_to_directory/content/home.php
 	Alias "/user" /var/www/path_to_directory/content/user-properties.php
+	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors
   </VirtualHost>
  \end{lstlisting}
-  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. The ServerName might be missing, to comply with local DNS settings.
+  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The ServerName and ServerAlias might be missing, to comply with local DNS settings.
   \item In the next step, all files named in the virtual host configuration, must be created or copied to the server. To create the files, the following command is used:
   \begin{lstlisting}
    sudo touch /var/www/path_to_directory/error.log
@@ -123,8 +124,7 @@ are in danger of being intercepted. The configuration proceeds in the following 
   }
   \end{lstlisting}
   
-  \item In the next step, the encryption certificates for the tls service have to be created. The certificates are self-signed certificates, using SHA256 as hashing algorithm and 
-  having a validity of 10 years (3650 days). For this, the following command is used:
+  \item In the next step, the encryption certificates for the tls service have to be created. The certificates are self-signed certificates, using SHA256 as hashing algorithm and having a validity of 10 years (3650 days). For this, the following command is used:
   \begin{lstlisting}[language=bash]
    openssl req -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/ssl/private/[servername].key -out /etc/ssl/certs/[servername].crt
   \end{lstlisting}
@@ -175,15 +175,8 @@ are in danger of being intercepted. The configuration proceeds in the following 
    sudo systemctl restart apache2
   \end{lstlisting}
   \end{itemize}
-  
+  Other files than those mentioned do not need to be altered to allow steady operation of the server. To allow public reaching of the server, the reuqired ports, which is essential 443, have to be cleared by the firewall.
 \end{enumerate}
-
-
-
-
-
-openssl genrsa 4096 -out /etc/ssl/certs/ca-certificate.crt
-
 
 \subsection{CentOS 7}
 In CentOS 7 several modifications were necessary to provide a stable and safe operation of the database and the interfaces. The following describes the installation of the required
