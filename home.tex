@@ -9,9 +9,7 @@ higher than 1 or 2. The same happens for the dropdown menu, which is included in
 \subsection{traffic.php}
 The traffic page is the evaluation page to the logdb database, which keeps track of users accessing the login.php page and successful logins. As these data are highly sensitive and 
 not important for the daily use of the database, the access to this page is limited to users with the role admin (role code 4). The presented data are split into different tables, 
-one for the login.php page, displaying amount of accesses, time and IP address. Another table displays the data for the logged in users, showing IP address, time of login and user 
-invoked. And finally there is a table displaying all login attempts, which failed due to incorrect credentials. This table should enable the recognition of brute force attacks on 
-given accounts.
+one for the login.php page, displaying amount of accesses, time and IP address. Another table displays the data for the logged in users, showing IP address, time of login and user invoked. And finally there is a table displaying all login attempts, which failed due to incorrect credentials. This table should enable the recognition of brute force attacks on given accounts.
 
 \subsection{database-update.php}
 The database-update.php provides the graphical interface to import external data into the database. Therefore, it is the only way, the users of the interface can modify the database 

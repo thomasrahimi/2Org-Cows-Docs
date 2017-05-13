@@ -94,7 +94,7 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors
   </VirtualHost>
  \end{lstlisting}
-  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The ServerName and ServerAlias might be missing, to comply with local DNS settings.
+  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The \textbf{ServerName} and \textbf{ServerAlias} might be missing, to comply with local DNS settings.
   \item In the next step, all files named in the virtual host configuration, must be created or copied to the server. To create the files, the following command is used:
   \begin{lstlisting}
    sudo touch /var/www/path_to_directory/error.log
