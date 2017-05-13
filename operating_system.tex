@@ -73,8 +73,8 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	SSLCertificateFile /etc/ssl/certs/name_of_cert.crt
 	SSLCertificateKeyFile /etc/ssl/private/key.key
 	SSLCACertificateFile /etc/ssl/certs/certificate.crt # can be missing, depending on tls configuration of the server
-	ServerName www.servername.com
-  ServerAlias servername.com
+	ServerName www.servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
+  ServerAlias servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
 	ServerAdmin admin@e-mail.com
 	DirectoryIndex login.php
 	ErrorDocument 404 /404 #should avoid 404 page not found errors
@@ -91,7 +91,7 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	Alias "/logout" /var/www/path_to_directory/content/scripts/logout.php
 	Alias "/home" /var/www/path_to_directory/content/home.php
 	Alias "/user" /var/www/path_to_directory/content/user-properties.php
-	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors
+	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors to the error.php page
   </VirtualHost>
  \end{lstlisting}
   The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The \textbf{ServerName} and \textbf{ServerAlias} might be missing, to comply with local DNS settings.
