@@ -95,6 +95,16 @@ are in danger of being intercepted. The configuration proceeds in the following 
   </VirtualHost>
  \end{lstlisting}
   The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The \textbf{ServerName} and \textbf{ServerAlias} might be missing, to comply with local DNS settings.
+  \item To ensure that users do not use the unencrypted site by coincidence, the following redirect for the non tls-host is created:
+  \begin{lstlisting}[language=bash]
+  <VirtualHost *:80>
+  ServerName www.servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
+  ServerAlias servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
+	ServerAdmin admin@e-mail.com
+	Redirect permanent / https://www.servername.com # Redirecting from non-tls host to tls-host
+	ErrorLog /var/www/path_to_directory/error.log
+	CustomLog /var/www/path_to_directory/access.log combined
+  \end{lstlisting}
   \item In the next step, all files named in the virtual host configuration, must be created or copied to the server. To create the files, the following command is used:
   \begin{lstlisting}
    sudo touch /var/www/path_to_directory/error.log
