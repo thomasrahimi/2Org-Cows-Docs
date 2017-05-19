@@ -18,4 +18,4 @@ on a larger scale, than in the manual inputs, which are provided in the other pa
 create-user.php page, the database-update.php page can just be accessed by users with higher roles. 
 
 \subsection{upload.php}
-The upload.php script processes the files selected in the database-update.php file and pastes them into the files database table in the agri\_star\_001 database.
+The upload.php script processes the files selected in the database-update.php file and pastes them into the files database table in the agri\_star\_001 database. Before the actual upload, the user is requested to select the type of the file, which should be uploaded to the database. According to the user choice, the entries are set in the file database and the file is processed in such a way. If there are errors during entering the file type, the file might not be processed correctly and be dropped during the reading process.
