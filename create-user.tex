@@ -15,6 +15,7 @@ The data inserted for the creation of an institution are processed by the create
 Furthermore, the create-user.php allows the deletion of existing users. This is limited to users with the role code 4 and 3 (admin and professor), therefore the form is just visible 
 to users of that role. To prevent accidental deletions, a separate checkbox has to be checked, to delete a user. User deletion is limited to users from the same institution and exclude 
 the current user. The deletion of the user is proceeded by the delete\_user\_script.php .\\
+To allow users, who forgot their password, to regain access to their accounts, users with higher roles can set the password for users in their institution. As there is, up till now, no further security in the password updates, these actions are limited to high profile users. In case it might be necessary, further protection mechanisms to the password updates, such as requesting a secret, etc. could be implemented. The password updates are processed by the set-password.php script.\\
 As the data in the database are bound to specific groups, the rights management on the group level has to be performed with the administration aswell. Therefore, all departments are 
 retrieved from the database and listed in a table. To improve the overview to the departments, the table is splitted into institutions and departments. Finally, the table includes 
 one checkbox per department, which sets a value in the corresponding table. The table also shows with the checkboxes, which departments are granted access rights to the data tables 
@@ -65,6 +66,15 @@ Finally the script quits with a success message.
 The deletion of a user does not lead to all his data being wiped out of the Dim\_User and the auth table, instead the user is simply kept from successfully logging into the frontend. 
 Therefore, the password in the auth table is updated to a cryptographically save binary string. Furthermore, the column user\_not\_active in the Dim\_User table is set to 1, which 
 does not show the user in any active state anymore. The script exits with a success message and refers to the create-user.php page.
+
+\subsection{set-password.php}
+The set-password.php script does the following steps:
+\begin{itemize}
+\item check if the two password fields match
+\item hashing the password, using the bcrypt standard
+\item saving the password hash to the auth database
+\end{itemize}
+If all entries are fine, the script quits successfully and refers to the create-user.php page again.
 
 \subsection{grant-rights.php}
 The permissions administration in the rights table is written with the grant-rights.php into the database. Unlike the former scripts, which basically performed an INSERT query on 
