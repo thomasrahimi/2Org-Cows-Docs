@@ -19,8 +19,8 @@ Than the /etc/ssh/sshd\_config file is modified, including adding and modifying 
  PermitRootLogin no
 \end{lstlisting}
 Finally the ssh server has to be restarted.\\
-Another security mechanism is the definition of available services in the /etc/hosts.allow and /etc/hosts.deny files on the server. This allows to block access all other webservices, 
-except for the required ones from other IP-addresses. This feature has been implemented in parts.\\
+Another security mechanism is the definition of available services in the /etc/hosts.allow and /etc/hosts.deny files on the server. This allows to block access all other 
+webservices, except for the required ones from other IP-addresses. This feature has been implemented in parts.\\
 Furthermore, the server makes use of a firewall, to prohibit attacks on not required open ports. Therefore, the ufw interface to iptables has been chosen. As the server is not 
 required to listen on other ports than the standard ports for the required services, the general rule is to deny all incoming traffic. At the same time, traffic is generally 
 allowed with the following commands:
@@ -50,8 +50,8 @@ to access the database locally, but hinders external clients from initiating a n
 \subsubsection{Web server installation and configuration}
 Both, apache2 and PHP7 have been installed in the initial installation, together with the database. As the web server should be configured as a virtual host, it is important to 
 modify the settings here. There have been two virtual hosts defined, both referring to the same content folder, one host serves as the non-tls demo installation, whereas the other
-host is set up with tls support to deliver the results of the requests as encrypted material. The non-tls host is not intended to be used for login, as all user data sent to this host
-are in danger of being intercepted. The configuration proceeds in the following steps:
+host is set up with tls support to deliver the results of the requests as encrypted material. The non-tls host is not intended to be used for login, as all user data sent to this 
+host are in danger of being intercepted. The configuration proceeds in the following steps:
 \begin{enumerate}
  \item First the directories for the virtualhost are created, using the following command:
  \begin{lstlisting}[language=bash]
@@ -94,7 +94,8 @@ are in danger of being intercepted. The configuration proceeds in the following 
 	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors to the error.php page
   </VirtualHost>
  \end{lstlisting}
-  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these entries are essential for the server to work. The \textbf{ServerName} and \textbf{ServerAlias} might be missing, to comply with local DNS settings.
+  The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these 
+  entries are essential for the server to work. The \textbf{ServerName} and \textbf{ServerAlias} might be missing, to comply with local DNS settings.
   \item To ensure that users do not use the unencrypted site by coincidence, the following redirect for the non tls-host is created:
   \begin{lstlisting}[language=bash]
   <VirtualHost *:80>
@@ -134,7 +135,8 @@ are in danger of being intercepted. The configuration proceeds in the following 
   }
   \end{lstlisting}
   
-  \item In the next step, the encryption certificates for the tls service have to be created. The certificates are self-signed certificates, using SHA256 as hashing algorithm and having a validity of 10 years (3650 days). For this, the following command is used:
+  \item In the next step, the encryption certificates for the tls service have to be created. The certificates are self-signed certificates, using SHA256 as 
+  hashing algorithm and having a validity of 10 years (3650 days). For this, the following command is used:
   \begin{lstlisting}[language=bash]
    openssl req -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/ssl/private/[servername].key -out /etc/ssl/certs/[servername].crt
   \end{lstlisting}
@@ -185,7 +187,8 @@ are in danger of being intercepted. The configuration proceeds in the following 
    sudo systemctl restart apache2
   \end{lstlisting}
   \end{itemize}
-  Other files than those mentioned do not need to be altered to allow steady operation of the server. To allow public reaching of the server, the reuqired ports, which is essential 443, have to be cleared by the firewall.
+  Other files than those mentioned do not need to be altered to allow steady operation of the server. To allow public reaching of the server, the reuqired ports, 
+  which is essential 443, have to be cleared by the firewall.
 \end{enumerate}
 
 \subsection{CentOS 7}
@@ -193,10 +196,10 @@ In CentOS 7 several modifications were necessary to provide a stable and safe op
 packages to a scratch installation. In case a LAMP installation has been chosen during the installation process of the operating system, some of these steps might be superfluous. 
 \subsubsection{Database installation and configuration}
 First the database had to be installed. 
-Therefore \textbf{MariaDB} has been chosen, as it is the default database environment for RHEL-based Linux distributions. For the installation, mariadb-server has to be chosen, all
-dependencies are automatically fixed by the yum RPM wrapper. Furthermore PHP7 had to be installed, here it is important
-to install the database drivers as well, which are shipped in the package php70w-mysqlnd. Together with PHP7 httpd, as the web server, needs to be installed. For the access of httpd
-to the database it is important to execute the following commands:\\
+Therefore \textbf{MariaDB} has been chosen, as it is the default database environment for RHEL-based Linux distributions. For the installation, mariadb-server has to be chosen, 
+all dependencies are automatically fixed by the yum RPM wrapper. Furthermore PHP7 had to be installed, here it is important
+to install the database drivers as well, which are shipped in the package php70w-mysqlnd. Together with PHP7 httpd, as the web server, needs to be installed. For the access of 
+httpd to the database it is important to execute the following commands:\\
 \begin{lstlisting}[language=bash]
  sudo sestatus
  sudo getsebool -a | grep httpd

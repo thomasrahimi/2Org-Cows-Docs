@@ -35,7 +35,7 @@ For the validity checks the following steps are taken:
  \item check, whether the password matches matches the control field
  \item check whether the user permissions, entered in the form, are allowed to be performed by the user invoked
  \item check whether the user invoked is allowed to select an institution different from his own
- \item check whether the entered permissions are meet the other data entered into the database, such as check, if a user role is possible or if a group exists.
+ \item check whether the entered permissions are met by the other data entered into the database, such as check, if a user role is possible or if a group exists.
 \end{itemize}
 All manual input on free text fields, such as the username, etc. is not checked again by the script and taken for true and granted. During the script, only one value is changed 
 automatically, which is the username, as it is set to a small letter string.\\
@@ -68,6 +68,8 @@ Therefore, the password in the auth table is updated to a cryptographically save
 does not show the user in any active state anymore. The script exits with a success message and refers to the create-user.php page.
 
 \subsection{set-password.php}
+In case a user has forgotten his password, these can be resetted by a user with a role higher than 2 (professor and admin). As there is no further checking, whether the user taking the action is 
+allowed to set the password, this is type of a trust system, which should exist in the institution taking part in the project.
 The set-password.php script does the following steps:
 \begin{itemize}
 \item check if the two password fields match

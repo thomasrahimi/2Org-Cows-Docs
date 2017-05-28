@@ -65,7 +65,14 @@ on any other frontend solution, except for the traffic.php page. If a browser hi
 are logged. To comply with the requirement not to store unnecessary individual data, the IP address is shortened to three blocks.\\
 In case the user logs in, the same data, including the ID\_User are stored, whereas failed login attempts are logged with time, username, user agent and IP address. The use of 
 this data is just for internal issues, such as preventing brute force attacks. It is not part of the project, to collect user data.\\
-To avoid the aggregation of old logdata into the database, an event is created to ensure the frequent deletion of old log entries on the access database. Therefore, the following SQL command is used:
+To avoid the aggregation of old logdata into the database, an event is created to ensure the frequent deletion of old log entries on the access database. Therefore, the 
+following SQL command is used:
 \begin{lstlisting}[language=sql]
 CREATE EVENT logrotate ON SCHEDULE EVERY 1 WEEK DO DELETE FROM  Log_Table WHERE time < NOW() - 60*60*24*7;
 \end{lstlisting}
+
+\subsection{sessions}\label{sessions_database}
+In order to allow scalability of the whole user interface and to improve the quality of the sessions, session data are stored in a separate database, which is called sessions. 
+The database has only one table, which is called sessions aswell and consists of three columns: \textbf{ID}, \textbf{last\_activity} and \textbf{data}. The first column contains the 
+\texttt{session\_id()}, the second one a timestamp with the most recent activity in the session and the last column contains all session data for the individual session. 
+All entries are administrated by the \hyperref[session-handler]{\textit{session handler}} for php.
