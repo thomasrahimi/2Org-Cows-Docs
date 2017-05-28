@@ -4,6 +4,52 @@
 The user interface for the database has been developed as a graphical interface to allow broad acces to the database. In the following, the different pages and their corresponding 
 scripts, in the web frontend, are described in detail.
 
+\subsection{Session Management}
+Throughout the user's way through the web frontend, three different sessions are started and terminated, some of them containing crucial data to the processes in the web frontend. 
+The first session started just checks, whether the user allows cookies in his browser or not. This session does not contain any data apart from the \texttt{session\_id()}.\\
+To log the user in, another session is started, which basically contains the server side csrf protection tokens for the login form. This session is closed and destroyed after 
+evaluation of the submitted tokens, by the login\_script.php script. The establishing of this session is crucial to the login process of the user, as otherwise the login\_script.php 
+discarges the login, as a csrf attack is suspected, if the credentials do not match.\\
+During the login, the final session is started, keeps track of the users action and allows him to access the core database. Unlike the two sessions before, this session contains 
+multiple session variables for many different purposes, as pointed out in the section to the \hyperref[login_script]{\textit{login\_script.php}}. If the user logs out from the 
+session, the session will be destroyed with the call \texttt{session\_destroy()} . In case the user quits without logging out, or the session is inactive for a longer time, sessions are 
+terminated automatically after 24 hours of inactivity. This timespan is set under the following point in the \emph{/etc/php/7.0/apache2/php.ini}:
+\begin{lstlisting}[language=php]
+ session.gc_maxlifetime = 1440
+\end{lstlisting}
+As all sessions are administrated in the individual \texttt{session\_set\_save\_handler()}, the major difference between the different sessions is their name, which is set with 
+\texttt{session\_name()}. To allow the individual session\_handler to manage sessions and to receive the incoming session calls from the different scripts, the 
+\emph{/etc/php/7.0/apache2/php.ini} file has to be altered to match the following:
+\begin{lstlisting}[language=php]
+session.save_handler = user
+\end{lstlisting}
+For the sessions to work under this conditions, it is important to include the file for the session\_handler file before \texttt{session\_name()} and \texttt{session\_start()} 
+are called.
+
+\subsubsection{session-handler.php}\label{session-handler}
+The session-handler.php file is based on a user comment on the \href{https://secure.php.net/manual/de/function.session-set-save-handler.php#118225}{\textit{php.net page}}, 
+which is altered to deal with the given \hyperref[sessions_database]{\textit{sessions table}} and to match the programming style for database queries. The session-handler.php file 
+contains a class definition, which implements the \texttt{session\_set\_save\_handler()} for this individual project. Within the class, the following functions for session handling 
+are defined:
+\begin{itemize}
+\item open → processes the opening of a session, by creating an entry into the database, where the \texttt{session\_id()} is stored
+\item close → closes the database connection to finish the session
+\item read → reads data, which are stored in the `data` column of the sessions database and gives them back as \$\_SESSION variables, is called whenever \$\_SESSION variables are read
+\item write → writes new \$\_SESSION variables into the database, is called whenever \$\_SESSION variables are set or altered
+\item destroy → deletes the database entry corresponding to the individual session, is called if the user logs out and \texttt{session\_destroy()} is called in the script
+\item gc [garbage collection] → removes old sessions, which have not been used for the timespan \$maxlifetime
+\end{itemize}
+Throughout the functions, several different parameters are expected by the functions, to work properly. These parameters are:
+\begin{itemize}
+ \item \$savepath → contains the general path to store session data, which is set in the \emph{/etc/php/7.0/apache2/php.ini}
+ \item \$sessionName → contains the session name, set in \texttt{session\_name()}, no further script interaction necessary to deliver it
+ \item \$id → contains the \texttt{session\_id()}, no further script interaction necessary to deliver it
+ \item \$data → contains all \$\_SESSION variables, is set automatically from all existing variables of a session
+ \item \$maxlifetime → contains maximal lifetime of a session, which is set in \emph{/etc/php/7.0/apache2/php.ini}
+\end{itemize}
+Throughout all functions, the database connection is initiated again, as this is the simplest way to deliver the connection token to all functions. For security reasons and to keep the code easier to 
+overview, the sql queries are written as prepared statements in an object-oriented manner.\\
+At the end of the file, the newly created class is embedded into the \texttt{session\_set\_save\_handler()}, to be included in all files, which use it.
 
 \subsection{login.php}
 The login.php site serves as the welcome site of the whole project, including basic information on the function of the sites for user access to the database.\\
@@ -18,7 +64,7 @@ password widget. To prevent CSRF-attacks on the visitors of the page, a random s
 processing of the login during login\_script.php to check for CSRF-attacks and to issue an alert if the sequences do not match. 
 Furthermore there is a submit button, which is submits the form data. Submitting this form starts processing of the form data with login\_script.php .
 
-\subsection{login\_script.php}
+\subsection{login\_script.php}\label{login_script}
 The login\_script.php script processes the data submitted from the login form. For security reasons, 
 authentication makes use of two different databases. The authentication database does not include any other data than the data required to initiate a session. In contrast,
 the agri\_star\_001 database includes more details on the specific user, including the insititution and the role of the user.\\
@@ -52,8 +98,15 @@ In case the login failed, the attempt is written into the Login\_Failed table in
 The database connections are closed at the end of each script to prevent accumulation of unused database connection by various scripts.
 
 \subsection{check-session.php and check-session\_restricted.php}
-The both scripts check-session.php and check-session\_restricted.php act as the connecting scripts between the different pages within the project. The basic intention of the scripts is to check, whether a session for the user exists and whether the user, therefore, is allowed to access pages within the project. Furthermore, the check-session\_restricted.php script checks, whether the logged in user has sufficient 
+The both scripts check-session.php and check-session\_restricted.php act as the connecting scripts between the different pages within the project. The basic intention of the scripts is to check, 
+whether a session for the user exists and whether the user, therefore, is allowed to access pages within the project. Furthermore, the check-session\_restricted.php script checks, whether the logged 
+in user has sufficient 
 permissions, to access limited pages.\\ 
-The session check conditions are the same for both scripts, in both cases they check for existence and matching of parameters, set in the login\_script.php. The major aim to check for is the session\_id(), which is set as a session variable in the initialization of the session. By checking the session variable of the session\_id() against the actual session\_id(), session hijackings might be detected and it is ensured that the session is sticked to one single session cookie. In case the client's IP address is set, the script also checks for the matching of this session variable with the current client's IP address, which should also prohibit session hijacking. As the browser agent of the regarding browser should be stable throughout the session, it is also set as a security measure to detect session hijacking.\\
-In case any of the mentioned security tests fails, the user is referred to the login.php page, receiving a message that the session was aborted due to security reasons. The same happens, if the session timed out due to long inactivity of the user. In all other cases, the current session is kept alive and the user refered to the destined page.\\
+The session check conditions are the same for both scripts, in both cases they check for existence and matching of parameters, set in the login\_script.php. The major aim to check for is the 
+\texttt{session\_id()}, which is set as a session variable in the initialization of the session. By checking the session variable of the \texttt{session\_id()} against the actual \texttt{session\_id()}, 
+session hijackings might be detected and it is ensured that the session is sticked to one single session cookie. In case the client's IP address is set, the script also checks for the matching of this 
+session variable with the current client's IP address, which should also prohibit session hijacking. As the browser agent of the regarding browser should be stable throughout the session, it is also 
+set as a security measure to detect session hijacking.\\
+In case any of the mentioned security tests fails, the user is referred to the login.php page, receiving a message that the session was aborted due to security reasons. The same happens, if the session 
+timed out due to long inactivity of the user. In all other cases, the current session is kept alive and the user refered to the destined page.\\
 For the case a user tries to access a page, to which he does not have sufficient permissions, the user is refered to the home.php page, receiving a message, indicating his insufficient rights.
