@@ -13,13 +13,13 @@ one is the setup of groups, allowed to login using ssh. Therefore, a specified g
  sudo addgroup --system [groupname]
  sudo adduser [username] [groupname]
 \end{lstlisting}
-Than the /etc/ssh/sshd\_config file is modified, including adding and modifying the following lines in the file:
+Than the \emph{/etc/ssh/sshd\_config} file is modified, including adding and modifying the following lines in the file:
 \begin{lstlisting}
  AllowGroups [groupname]
  PermitRootLogin no
 \end{lstlisting}
 Finally the ssh server has to be restarted.\\
-Another security mechanism is the definition of available services in the /etc/hosts.allow and /etc/hosts.deny files on the server. This allows to block access all other 
+Another security mechanism is the definition of available services in the \emph{/etc/hosts.allow} and \emph{/etc/hosts.deny} files on the server. This allows to block access all other 
 webservices, except for the required ones from other IP-addresses. This feature has been implemented in parts.\\
 Furthermore, the server makes use of a firewall, to prohibit attacks on not required open ports. Therefore, the ufw interface to iptables has been chosen. As the server is not 
 required to listen on other ports than the standard ports for the required services, the general rule is to deny all incoming traffic. At the same time, traffic is generally 
@@ -43,7 +43,7 @@ After the configuration is finished, the firewall is set active with the followi
 \subsubsection{Database installation and configuration}
 As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
 to match the conditions, under which the database server is operating.\\
-If necessary the configuration file under /etc/mysql/conf.d/server.conf has to be altered. It is important to check, if the networking access to the database server is allowed and 
+If necessary the configuration file under \emph{/etc/mysql/conf.d/server.conf} has to be altered. It is important to check, if the networking access to the database server is allowed and 
 if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
 to access the database locally, but hinders external clients from initiating a network connection to the database.
 
@@ -111,7 +111,7 @@ host are in danger of being intercepted. The configuration proceeds in the follo
    sudo touch /var/www/path_to_directory/error.log
    sudo touch /var/www/path_to_directory/access.log
   \end{lstlisting}
-  \item To ensure logrotate to compress the log files of the virtualhost, the file /etc/logrotate.d/apache2 has to be altered to the following:
+  \item To ensure logrotate to compress the log files of the virtualhost, the file \emph{/etc/logrotate.d/apache2} has to be altered to the following:
   \begin{lstlisting}[language=bash]
    /var/log/apache2/*.log /var/www/path_to_directory/*.log {
         daily
@@ -146,7 +146,7 @@ host are in danger of being intercepted. The configuration proceeds in the follo
    sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
   \end{lstlisting}
   \item In the next step, the tls setting of the whole server are modified to meet most recent requirements on the cryptographic strength of the transaction. Therefore, a 
-  designated file under the following location /etc/apache2/conf-available/ssl-params.conf is created. The content of the file is the following:
+  designated file under the following location \emph{/etc/apache2/conf-available/ssl-params.conf} is created. The content of the file is the following:
   \begin{lstlisting}[language=bash]
    #modern security configuration
    SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1
