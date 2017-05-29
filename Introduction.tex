@@ -35,7 +35,7 @@ The web frontend is largely written in PHP7 and HTML5, following the following p
  \item easy to write, understand and maintain code
  \item Mostly procedural code style, only exception is the database system, which is based on object oriented code style
  \item All available standard security solutions for PHP and HTML code should be applied, to ensure secure operation of the database. This includes escaping of all strings, using 
- mysqli::real\_escape\_string() for all values, which is executed for all strings being in some kind of contact to the database, and htmlspecialchars() for all other strings. 
+ \texttt{mysqli::real\_escape\_string()} for all values, which is executed for all strings being in some kind of contact to the database, and \texttt{htmlspecialchars()} for all other strings. 
  The insert scripts perform type checking operations on the content to insert, to limit the risk of inconsistent data.
  \item SQL queries, including user generated content, are usually proceeded as prepared statements, to limit the risk of sql injections.
 \end{itemize}

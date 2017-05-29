@@ -20,7 +20,10 @@ As the data in the database are bound to specific groups, the rights management 
 retrieved from the database and listed in a table. To improve the overview to the departments, the table is splitted into institutions and departments. Finally, the table includes 
 one checkbox per department, which sets a value in the corresponding table. The table also shows with the checkboxes, which departments are granted access rights to the data tables 
 of the institution invoked. As all permissions are stored in a translation table in the database, an own script updates this table 
-and sets the value for the access on the data.
+and sets the value for the access on the data.\\
+As there are multiple forms on one page, the csrf protection tokens are applied as split calculation tokens. In this case, the \$\_SESSION token just contains an random number, generated with 
+\texttt{uniqid()}. For the hidden input field, this number is part of the input for an SHA256 hash calculation with \texttt{hash\_hmac()}, where a string and the number from the \$\_SESSION variable are 
+the input. The same operation takes place in all the scripts, the output is then compared to the submitted \$\_POST variable, using \texttt{strcmp()}.
 
 \subsection{create\_user\_script.php}
 The create\_user\_script.php is the processing file for the entries to create a new user in the web interface for the database. Basically the script just performs the validity checks 
