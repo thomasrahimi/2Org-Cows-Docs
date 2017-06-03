@@ -10,7 +10,8 @@ higher than 1 or 2. The same happens for the dropdown menu, which is included in
 The traffic page is the evaluation page to the logdb database, which keeps track of users accessing the login.php page and successful logins. As these data are highly sensitive and 
 not important for the daily use of the database, the access to this page is limited to users with the role admin (role code 4). The presented data are split into different tables, 
 one for the login.php page, displaying amount of accesses, time and IP address. Within that table, there is one line for all accesses, ordered by IP address corresponding to that access. 
-Another table displays the data for the logged in users, showing IP address, time of login and user invoked. And finally there is a table displaying all login attempts, which failed due to 
+Another table displays the data for the logged in users, showing IP address, time of login and user invoked. Just as a fency feature, to check, who is making use of the database, the page also 
+shows all users, who logged in the last week and the amount of their logins. And finally there is a table displaying all login attempts, which failed due to 
 incorrect credentials. This table should enable the recognition of brute force attacks on given accounts.\\
 The different table lines rely on different SQL queries, to gain there results, even if they request the same table.
 
@@ -26,4 +27,9 @@ the user is requested to select the type of the file, which should be uploaded t
 in such a way. If there are errors during entering the file type, the file might not be processed correctly and be dropped during the reading process.
 
 \subsection{create-measurement.php}
-In order to map results of trials to secific measurements, measurement procedures are stored in a specific database, which is then linked to the results. 
+In order to map results of trials to secific measurements, measurement procedures are stored in a specific database, which is then linked to the results. The whole page is just accessible to users with 
+role rights higher than 2. On the left side, the user can create a new measurement method, by entering the required data, such as which physical unit is measured, a name to the measurement and some 
+description, which can either be provided as a separate link or as a text. After submitting the data entered here, the measurement\_script.php script pastes the data into the corresponding Dim\_Gage 
+table in the agri\_star\_001 database.\\
+On the right side of the page, are the measurement methods of the representing group presented in a table, where the lower row contains the description text. As all measurement methods are defined by 
+the individual groups, methods might come up several time, if defined again by another group.
