@@ -92,6 +92,7 @@ host are in danger of being intercepted. The configuration proceeds in the follo
 	Alias "/home" /var/www/path_to_directory/content/home.php
 	Alias "/user" /var/www/path_to_directory/content/user-properties.php
 	Alias "/404" /var/www/path_to_directory/content/error.php # should avoid 404 page not found errors to the error.php page
+	Alias "/license" /var/www/path_to_directory/content/license.php
   </VirtualHost>
  \end{lstlisting}
   The "Alias" settings maskerade the files, visible to the user with a shorter, easier URL. As the php code mostly refers to the shortened Alias URLs, these 
@@ -163,7 +164,8 @@ host are in danger of being intercepted. The configuration proceeds in the follo
 
    SSLOpenSSLConfCmd DHParameters "/etc/ssl/certs/dhparam.pem"
   \end{lstlisting}
-  This file defines the encryption standards, which the server accepts for connections. These standards might exclude older clients, such as Internet Explorer on Windows XP.
+  This file defines the encryption standards, which the server accepts for connections. These standards might exclude older clients, such as Internet Explorer on Windows XP. It follows the 
+  recommendations by \href{https://wiki.mozilla.org/Security/Server_Side_TLS}{\textit{Mozilla developers' database}}.
   \item To enable the configuration, the following commands have to be executed:
   \begin{itemize}
   \item to enable the ssl module of apache2:
