@@ -39,13 +39,18 @@ After the configuration is finished, the firewall is set active with the followi
  sudo ufw enable
 \end{lstlisting}
 
-
+\label{Database installation and configuration}
 \subsubsection{Database installation and configuration}
 As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
 to match the conditions, under which the database server is operating.\\
 If necessary the configuration file under \emph{/etc/mysql/conf.d/server.conf} has to be altered. It is important to check, if the networking access to the database server is allowed and 
 if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
-to access the database locally, but hinders external clients from initiating a network connection to the database.
+to access the database locally, but hinders external clients from initiating a network connection to the database.\\
+To enable Python3 access to the database, the connection modules for Python3 to the database are required, these are installed with the following command:
+\begin{lstlisting}
+ sudo apt install python3-mysql.connector
+\end{lstlisting}
+
 
 \subsubsection{Web server installation and configuration}
 Both, apache2 and PHP7 have been installed in the initial installation, together with the database. As the web server should be configured as a virtual host, it is important to 
@@ -74,7 +79,7 @@ host are in danger of being intercepted. The configuration proceeds in the follo
 	SSLCertificateKeyFile /etc/ssl/private/key.key
 	SSLCACertificateFile /etc/ssl/certs/certificate.crt # can be missing, depending on tls configuration of the server
 	ServerName www.servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
-  ServerAlias servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
+	ServerAlias servername.com #is missing in case of the server, to allow host resolution to the default virtual host and avoid DNS conflicts
 	ServerAdmin admin@e-mail.com
 	DirectoryIndex login.php
 	ErrorDocument 404 /404 #should avoid 404 page not found errors
