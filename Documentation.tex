@@ -77,10 +77,11 @@
 \thispagestyle{empty}
 \newpage
 
-\clearpage
+%\clearpage
+\thispagestyle{empty}
 \phantomsection %wichtig für die richtige Verlinkung im Inhaltsverzeichnis, muss vor dem zu verlinkenden Artikel sein.
-\tableofcontents
 \addcontentsline{toc}{section}{Table of Contents}
+\tableofcontents
 \phantomsection
 \listoffigures
 \addcontentsline{toc}{section}{List of Figures}
