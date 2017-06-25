@@ -79,9 +79,14 @@ Data processing happen in 4 steps, which come up sequencially.
  redirects the user to login.php and creates error message, indicating unknown username. Otherwise the script continues to step 2.
  \item In case, a user has tried, a login with non matching credentials, too many times, the user is redirected to the login.php page and told to wait for some time. This settings 
  should slow down brute force attacks on available accounts.
- \item If the username has been found, the script checks, whether the password, provided by the user, matches the password stored in the ``auth`` database. Therefore the PHP function 
+ \item If the username has been found, the script checks, whether the password, provided by the user, matches the password stored in the "auth" database. Therefore the PHP function 
  \texttt{password\_verify()} is used. If the password provided does not match to the hash value, stored in the database, the user is redirected to login.php, receiving an error message about the 
- password. Otherwise the script starts to initiate a session.
+ password. Otherwise the script prepares to start initiating a session for the database. 
+ \item Before the new session variables can be assigned, the old session has to be deleted, using \texttt{session\_destroy()}.
+ \item The cookie parameters for the new session are defined with the call \texttt{session\_set\_cookie\_params(\$lifetime, \$path, \$domain, \$secure, \$httponly)} with \$secure ensuring cookies just 
+ to be transmitted over tls encrypted connections and \$httponly making sure that JavaScript can not access the cookies. The \$domain variable is set in the separate configuration file \emph{domain.php} 
+ to allow universal compatibility of the scripts.
+ \item The session name is set with the call \texttt{session\_name()}, afterwards, the session is started.
  \item In the next step the script starts to create a session for the use of the research database. In order to ensure the security of the session, several steps are taken:
  \begin{itemize}
   \item the IP address of the user is stored as a session variable to prevent session hijacking
