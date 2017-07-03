@@ -47,8 +47,12 @@ If necessary the configuration file under \emph{/etc/mysql/conf.d/server.conf} h
 if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
 to access the database locally, but hinders external clients from initiating a network connection to the database.\\
 To enable Python3 access to the database, the connection modules for Python3 to the database are required, these are installed with the following command:
-\begin{lstlisting}
+\begin{lstlisting}[language=bash]
  sudo apt install python3-mysql.connector
+\end{lstlisting}
+For further data analysis on the server, the packages SciPy and NumPy are required, as their logic is necessary to the analysis code. These packages are installed with the following command:
+\begin{lstlisting}[language=bash]
+ sudo apt install python3-numpy python3-scipy
 \end{lstlisting}
 
 

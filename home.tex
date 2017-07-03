@@ -3,7 +3,7 @@
 \subsection{home.php}
 
 The home.php page serves as the central page of the whole project, providing basic information on the use of the frontend and showing all navigation entries to refer to other pages 
-within the frontend. To ensure that non permissioned users can not access pages such as \hyperref[create-user.php]{create-user.php}, these entries are just shown to users with roles 
+within the frontend. To ensure that users with insufficient permissions can not access pages such as \hyperref[create-user.php]{create-user.php}, these entries are just shown to users with roles 
 higher than 1 or 2. The same happens for the dropdown menu, which is included in all pages, to allow easy navigation. 
 
 \subsection{traffic.php}
@@ -19,7 +19,7 @@ The different table lines rely on different SQL queries, to gain there results, 
 The database-update.php provides the graphical interface to import external data into the database. Therefore, it is the only way, the users of the interface can modify the database 
 on a larger scale, than in the manual inputs, which are provided in the other pages. For the upload the user has to choose the appropriate requirements for the file, which include the 
 measurement procedure applied during the data collection of the data in the file. For upload, only text based formats, such as ADIS, csv and txt files are allowed, as their processing is more 
-efficient and safer. Checks on the file type are done by requesting the mime type of the files during upload and again during processing. Unknown files, will be discarged. 
+efficient and safer. Checks on the file type are done by requesting the mime type of the files during upload and again during processing. Unknown files, will be discharged. 
 The processing of the files takes place in the following upload.php file. Similar to the create-user.php page, the database-update.php page can just be accessed by users with higher roles. 
 
 \subsection{upload.php}
@@ -36,7 +36,7 @@ As files are transmitted in the \$\_FILES array, the script basically checks on 
  \item The mime type is checked again an array of allowed mime types. If the mime type of the file is not in the array, the process is interrupted and the user referred back to the 
  \emph{database-update.php} page.
  \item If the file's mime type is accepted, the file is inserted into a SQL query and again, as the query is processed as a prepared statement, sent to the database with 
- \texttt{mysqli::send\_long\_data()}
+ \texttt{mysqli::send\_long\_data()} again. The double insertion ensures that the file is transferred into the database, even if the file size exceeds the size for the prepared statement.
 \end{itemize}
 
 
