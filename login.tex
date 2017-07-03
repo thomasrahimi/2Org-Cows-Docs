@@ -85,7 +85,7 @@ Data processing happen in 4 steps, which come up sequencially.
  \item Before the new session variables can be assigned, the old session has to be deleted, using \texttt{session\_destroy()}.
  \item The cookie parameters for the new session are defined with the call \texttt{session\_set\_cookie\_params(\$lifetime, \$path, \$domain, \$secure, \$httponly)} with \$secure ensuring cookies just 
  to be transmitted over tls encrypted connections and \$httponly making sure that JavaScript can not access the cookies. The \$domain variable is set in the separate configuration file \emph{domain.php} 
- to allow universal compatibility of the scripts.
+ to allow universal compatibility of the scripts, this variable is crucial to ensure quick login without errors.
  \item The session name is set with the call \texttt{session\_name()}, afterwards, the session is started.
  \item In the next step the script starts to create a session for the use of the research database. In order to ensure the security of the session, several steps are taken:
  \begin{itemize}
