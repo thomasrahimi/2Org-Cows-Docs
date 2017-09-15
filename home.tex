@@ -1,12 +1,12 @@
 % !TEX root = Documentation.tex
 
-\subsection{home.php}
+\section{home.php}
 
 The home.php page serves as the central page of the whole project, providing basic information on the use of the frontend and showing all navigation entries to refer to other pages 
 within the frontend. To ensure that users with insufficient permissions can not access pages such as \hyperref[create-user.php]{create-user.php}, these entries are just shown to users with roles 
 higher than 1 or 2. The same happens for the dropdown menu, which is included in all pages, to allow easy navigation. 
 
-\subsection{traffic.php}
+\section{traffic.php}
 The traffic page is the evaluation page to the logdb database, which keeps track of users accessing the login.php page and successful logins. As these data are highly sensitive and 
 not important for the daily use of the database, the access to this page is limited to users with the role admin (role code 4). The presented data are split into different tables, 
 one for the login.php page, displaying amount of accesses, time and IP address. Within that table, there is one line for all accesses, ordered by IP address corresponding to that access. 
@@ -15,14 +15,14 @@ shows all users, who logged in the last week and the amount of their logins. And
 incorrect credentials. This table should enable the recognition of brute force attacks on given accounts.\\
 The different table lines rely on different SQL queries, to gain there results, even if they request the same table.
 
-\subsection{database-update.php}
+\section{database-update.php}
 The database-update.php provides the graphical interface to import external data into the database. Therefore, it is the only way, the users of the interface can modify the database 
 on a larger scale, than in the manual inputs, which are provided in the other pages. For the upload the user has to choose the appropriate requirements for the file, which include the 
 measurement procedure applied during the data collection of the data in the file. For upload, only text based formats, such as ADIS, csv and txt files are allowed, as their processing is more 
 efficient and safer. Checks on the file type are done by requesting the mime type of the files during upload and again during processing. Unknown files, will be discharged. 
 The processing of the files takes place in the following upload.php file. Similar to the create-user.php page, the database-update.php page can just be accessed by users with higher roles. 
 
-\subsection{upload.php}
+\section{upload.php}
 The upload.php script processes the files selected in the database-update.php file and pastes them into the files database table in the agri\_star\_001 database. Before the actual upload, 
 the user is requested to select the type of the file, which should be uploaded to the database. According to the user choice, the entries are set in the file database and the file is processed 
 in such a way. If there are errors during entering the file type, the file might not be processed correctly and be dropped during the reading process.
@@ -39,8 +39,10 @@ As files are transmitted in the \$\_FILES array, the script basically checks on 
  \texttt{mysqli::send\_long\_data()} again. The double insertion ensures that the file is transferred into the database, even if the file size exceeds the size for the prepared statement.
 \end{itemize}
 
+\section{REST API}
+To allow access to external webservices, the user can set up the REST API to connect to external servers. Currently this just works for \url{https://api-staging.smaxtec.com/api/v1/}. To increase security and to ensure proper separation of the different processes, the API is accessed using a Python3 script. The user input, from \emph{database-update.php} is stored in the credential database with a PHP script. To create a connection to the service, receive the credentials and write the input into the fact tables, a Python3 script is used. Further information is provided in the interfaces chapter.
 
-\subsection{create-measurement.php}
+\section{create-measurement.php}
 In order to map results of trials to secific measurements, measurement procedures are stored in a specific database, which is then linked to the results. The whole page is just accessible to users with 
 role rights higher than 2. On the left side, the user can create a new measurement method, by entering the required data, such as which physical unit is measured, a name to the measurement and some 
 description, which can either be provided as a separate link or as a text. After submitting the data entered here, the \emph{measurement\_script.php} script pastes the data into the corresponding 

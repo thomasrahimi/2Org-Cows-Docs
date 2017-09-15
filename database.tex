@@ -1,16 +1,25 @@
 % !TEX root = Documentation.tex
 
-\section{Database}
+\chapter{Database}
 
 The database for the projects are API-compatible, SQL databases, which run on freely available linux systems. Eventually the used and tested MySQL or MariaDB databases could be 
 replaced by other systems, such as MSSQL. Nevertheless, a full compatibility of other databases with the source code provided can not be guaranteed. To ensure safe operation of the
 server, databases, which are not directly linked to the project data, are separated from the main database. As a result, the login database and the external logging database are 
 separated from the main database. Therefore, three different databases exist for the purpose of the project.\\ 
-To increase the security of the database and to limit the risk of damage in case of SQL-injections, all databases are accessed by non-privileged users. Furthermore, there is a 
+To increase the security of the database and to limit the risk of damage in case of SQL-injections, all databases are accessed by non-privileged users. 
+These users are created, using the following syntax: 
+\begin{lstlisting}[language=sql]
+ CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+\end{lstlisting}
+To grant rights on specific databases to the users, the following syntax is used:
+\begin{lstlisting}[language=sql]
+ GRANT SELECT, INSERT, DELETE, UPDATE, INDEX ON `table`.* TO 'username'@'localhost';
+\end{lstlisting}
+Furthermore, there is a 
 separation in the users, regarding the function of the database invoked, to limit access to sensitive data in the database. As the project does not require external programm access 
 to the database, the network access to the database is limited to localhost.
 
-\subsection{agri\_star\_001}
+\section{agri\_star\_001}
 
 The agri\_star\_001 database is the main productive database in the whole project, as it serves as the major saving space for data gathered in the project. In the project's initial 
 shape, the agri\_star\_001 should have been the only database in the project, but during the development of the web frontend, further databases have been added for several 
@@ -50,7 +59,7 @@ different sql queries in one go. Further connection of the tables happens over t
 In many tables, the primary key is set automatically as auto increment, to ensure that all datasets have unique keys. Manual setting of the keys might under certain circumstances 
 lead to multiple data sets, having the same primary key, as the random function to generate the key number might output the same number under different circumstances.
 
-\subsection{user\_auth}
+\section{user\_auth}
 
 The user\_auth database is an auxiliary database to the agri\_star\_001 database. It is required to allow logins to the web frontend, as it saves the authentication information 
 for the users. Unlike agri\_star\_001 database, user\_auth just contains one table (auth), which includes all required information, basically the username, the password hash and the 
@@ -59,7 +68,7 @@ value in the Dim\_User table, as it is taken over from the transaction id of the
 user\_auth database, to prevent external attacks on the main database. Furthermore, the user\_auth database has an own dedicated user, which does not have any rights on other 
 databases, to access the database.
 
-\subsection{logdb}
+\section{logdb}
 For security reasons, the web frontend includes some logging, which writes the results into a designated database. This database consists of three tables, which are not depending 
 on any other frontend solution, except for the traffic.php page. If a browser hits the login.php page, the access IP, the user agent of the browser invoked and the time of access 
 are logged. To comply with the requirement not to store unnecessary individual data, the IP address is shortened to three blocks.\\
@@ -71,8 +80,11 @@ following SQL command is used:
 CREATE EVENT logrotate ON SCHEDULE EVERY 1 WEEK DO DELETE FROM  Log_Table WHERE time < NOW() - 60*60*24*7;
 \end{lstlisting}
 
-\subsection{sessions}\label{sessions_database}
+\section{sessions}\label{sessions_database}
 In order to allow scalability of the whole user interface and to improve the quality of the sessions, session data are stored in a separate database, which is called sessions. 
 The database has only one table, which is called sessions aswell and consists of three columns: \textbf{ID}, \textbf{last\_activity} and \textbf{data}. The first column contains the 
 \texttt{session\_id()}, the second one a timestamp with the most recent activity in the session and the last column contains all session data for the individual session. 
 All entries are administrated by the \hyperref[session-handler]{\textit{session handler}} for php.
+
+\section{credentials}
+To store credentials for external webservices and further information required to establish the connection to these services, a special database is prepared. This database has a similar structure as the user\_auth database, which also just consists of one table. Unlike the user\_auth table, the database provides more columns, which include the ID\_User, the service for which the information is stored, the username to the service, the password to the service, eventually the token to access the service and further information to access the service. 

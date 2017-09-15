@@ -1,12 +1,12 @@
 % !TEX root = Documentation.tex
 
-\section{Operating System}
-\subsection{Ubuntu}
+\chapter{Operating System}
+\section{Ubuntu}
 In Ubuntu less modifications than in CentOS are necessary to allow a stable and safe operation of the server. As the operating system ships another mandatory access controll system
 (MAC), configuration of user rights is far easier and faster proceded. During the installation of the operating system, the LAMP stack and the openssh server have been chosen for
 automatic installation. After the installation and the required reboot, updates should be checked and installed.\\
 
-\subsubsection{Securing the server}
+\subsection{Securing the server}
 To improve the server security, just logged in users can make use of the server. To prohibit external login attempts using ssh, the server is secured in different manners, of which 
 one is the setup of groups, allowed to login using ssh. Therefore, a specified group is created, to which all login users are added, requiring the following commands:
 \begin{lstlisting}[language=bash]
@@ -40,12 +40,22 @@ After the configuration is finished, the firewall is set active with the followi
 \end{lstlisting}
 
 \label{Database installation and configuration}
-\subsubsection{Database installation and configuration}
+\subsection{Database installation and configuration}
 As Ubuntu ships MySQL as its default database, MySQL is used in this installation aswell. The database comes with a basic configuration, which should be checked after installation
 to match the conditions, under which the database server is operating.\\
-If necessary the configuration file under \emph{/etc/mysql/conf.d/server.conf} has to be altered. It is important to check, if the networking access to the database server is allowed and 
-if, which clients are gained access to the databases. For security and compatibility the setting listen: 127.0.0.1 has been chosen here, which allows the network interface of PHP7
+If necessary the MySQL configuration file under \emph{/etc/mysql/conf.d/server.conf} has to be altered. It is important to check, if the networking access to the database server is allowed and 
+if, which clients are gained access to the databases. For security and compatibility the following setting has been chosen:
+\begin{lstlisting}[language=bash]
+ listen: 127.0.0.1
+\end{lstlisting}
+This setting allows the network interface of PHP7
 to access the database locally, but hinders external clients from initiating a network connection to the database.\\
+Under MariaDB, the configuration can be done in the file \emph{/etc/mysql/conf.d/mysql.conf} using the following syntax:
+\begin{lstlisting}[language=bash]
+ [mysqld]
+ bind-address = 127.0.0.1
+\end{lstlisting}
+[mysqld] refers to the server, as the file is used for the configuration of both, the client and the server.\\
 To enable Python3 access to the database, the connection modules for Python3 to the database are required, these are installed with the following command:
 \begin{lstlisting}[language=bash]
  sudo apt install python3-mysql.connector
@@ -56,7 +66,7 @@ For further data analysis on the server, the packages SciPy and NumPy are requir
 \end{lstlisting}
 
 
-\subsubsection{Web server installation and configuration}
+\subsection{Web server installation and configuration}
 Both, apache2 and PHP7 have been installed in the initial installation, together with the database. As the web server should be configured as a virtual host, it is important to 
 modify the settings here. There have been two virtual hosts defined, both referring to the same content folder, one host serves as the non-tls demo installation, whereas the other
 host is set up with tls support to deliver the results of the requests as encrypted material. The non-tls host is not intended to be used for login, as all user data sent to this 
@@ -148,7 +158,7 @@ host are in danger of being intercepted. The configuration proceeds in the follo
   \item In the next step, the encryption certificates for the tls service have to be created. The certificates are self-signed certificates, using SHA256 as 
   hashing algorithm and having a validity of 10 years (3650 days). For this, the following command is used:
   \begin{lstlisting}[language=bash]
-   openssl req -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/ssl/private/[servername].key -out /etc/ssl/certs/[servername].crt
+   sudo openssl req -sha512 -x509 -nodes -days 3650 -newkey rsa:4096 -keyout /etc/ssl/private/[servername].key -out /etc/ssl/certs/[servername].crt
   \end{lstlisting}
   During the creation process, the information for the certificate have to be provided. Also a Diffie-Hellman file has to be created, to improve the security of the tls connection 
   by using the Diffie-Hellman paradigma for PerfectForwardSecrecy of the sessions:
@@ -202,10 +212,10 @@ host are in danger of being intercepted. The configuration proceeds in the follo
   which is essential 443, have to be cleared by the firewall.
 \end{enumerate}
 
-\subsection{CentOS 7}
+\section{CentOS 7}
 In CentOS 7 several modifications were necessary to provide a stable and safe operation of the database and the interfaces. The following describes the installation of the required
 packages to a scratch installation. In case a LAMP installation has been chosen during the installation process of the operating system, some of these steps might be superfluous. 
-\subsubsection{Database installation and configuration}
+\subsection{Database installation and configuration}
 First the database had to be installed. 
 Therefore \textbf{MariaDB} has been chosen, as it is the default database environment for RHEL-based Linux distributions. For the installation, mariadb-server has to be chosen, 
 all dependencies are automatically fixed by the yum RPM wrapper. Furthermore PHP7 had to be installed, here it is important
@@ -217,7 +227,7 @@ httpd to the database it is important to execute the following commands:\\
  sudo setsebool -P httpd_can_network_connect_db 1
 \end{lstlisting}
 
-\subsubsection{Web server installation and configuration}
+\subsection{Web server installation and configuration}
 As the LAMP stack is used for the project development, \textbf{apache2} is deployed as the default web server. apache2 is installed as a dependency of PHP7 and is shipped in 
 the package httpd. To ensure proper operation, the server has to be configured for shipping of multiple websites beside each other, which is ensured by using virtual hosts. 
 Therefore the following steps are necessary: 

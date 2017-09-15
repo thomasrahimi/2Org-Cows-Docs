@@ -1,10 +1,10 @@
 % !TEX root = Documentation.tex
 
-\section{The webbased User Interface}
+\chapter{The webbased User Interface}
 The user interface for the database has been developed as a graphical interface to allow broad acces to the database. In the following, the different pages and their corresponding 
 scripts, in the web frontend, are described in detail.
 
-\subsection{Session Management}
+\section{Session Management}
 Throughout the user's way through the web frontend, three different sessions are started and terminated, some of them containing crucial data to the processes in the web frontend. 
 The first session started just checks, whether the user allows cookies in his browser or not. This session does not contain any data apart from the \texttt{session\_id()}.\\
 To log the user in, another session is started, which basically contains the server side csrf protection tokens for the login form. This session is closed and destroyed after 
@@ -26,7 +26,7 @@ session.save_handler = user
 For the sessions to work under this conditions, it is important to include the file for the session\_handler file before \texttt{session\_name()} and \texttt{session\_start()} 
 are called.
 
-\subsubsection{session-handler.php}\label{session-handler}
+\subsection{session-handler.php}\label{session-handler}
 The session-handler.php file is based on a user comment on the \href{https://secure.php.net/manual/de/function.session-set-save-handler.php#118225}{\textit{php.net page}}, 
 which is altered to deal with the given \hyperref[sessions_database]{\textit{sessions table}} and to match the programming style for database queries. The session-handler.php file 
 contains a class definition, which implements the \texttt{session\_set\_save\_handler()} for this individual project. Within the class, the following functions for session handling 
@@ -53,7 +53,7 @@ At the end of the file, the newly created class is embedded into the \texttt{ses
 The whole file is visible here:
 \lstinputlisting[language=php]{session-handler.php}
 
-\subsection{login.php}
+\section{login.php}
 The \emph{login.php} site serves as the welcome site of the whole project, including basic information on the function of the sites for user access to the database.\\
 For security reasons and to track the visitors of the page, basic information about the visitor is stored in a separate database. This includes IP addresses, user agent of 
 the browser and the time of access. To comply with the lawful requirement not to store personal information, such as full IP addresses, the IP address is shortened to three blocks,
